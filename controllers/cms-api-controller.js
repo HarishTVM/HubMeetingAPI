@@ -23,7 +23,7 @@ module.exports.createCospace = (req, res, next)=>{
 };
 
 module.exports.getCoSpacesUsers = (req, res, next)=>{
-    var coSpaceId = req.params.id;
+    var coSpaceId = req.query.cospaceid;
     console.log("querystring "+ coSpaceId);
     httpHelper.getRequest("coSpaces/"+coSpaceId+"/coSpaceUsers")
     .then((response)=>baseController.sendResponseData("OK", response, res))
@@ -31,7 +31,7 @@ module.exports.getCoSpacesUsers = (req, res, next)=>{
 };
 
 module.exports.getCoSpacesUsersById = (req, res, next)=>{
-    var userId = req.params.id;
+    var userId = req.query.userid;
     console.log("querystring "+ userId);
     httpHelper.getRequest("users/"+userId+"/userCoSpaces")
     .then((response)=>baseController.sendResponseData("OK", response, res))
