@@ -86,6 +86,8 @@ module.exports.rabbitMQ = {
 };
 
 module.exports.app = {
+	name: 'API',
+	version: '1.0.0',
 	enableSSL: false,
 	port: 8080,
 	appStage: true, // true for development and false for live
