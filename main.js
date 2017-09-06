@@ -6,6 +6,7 @@ const config = require('./web-config');
 const restify = require('restify');
 const restifyPlugins = require('restify-plugins');
 const cluster = require('cluster');
+const dbHelper = require('./helpers/db-helper');
 
 if (cluster.isMaster){
   // Count the machine's CPUs
@@ -27,35 +28,31 @@ else{
     server.use(restifyPlugins.fullResponse());
 
     // Server Starts to Listen
-    server.listen(config.app.port, () => {
-        // establish connection to mongodb
-        // mongoose.Promise = global.Promise;
-        // mongoose.connect(config.db.uri, { useMongoClient: true });
+    server.listen(config.app.port, () => {   
+        console.log('Server is listening on port ${config.app.port}');
 
-        // const db = mongoose.connection;
-
-        // db.on('error', (err) => {
-        //     console.error(err);
-        //     process.exit(1);
-        // });
-
-        // db.once('open', () => {
+        // establish connection to mysql
+        dbHelper.createConnection();
+        dbHelper.dbConnector.on('connected', (connection)=>{
+            console.log('DB Connection established');
             require('./api-route')(server);
-            console.log(`Server is listening on port ${config.app.port}`);
-
-            // Universal Handler
-            server.on('InternalServer', function(req, res, err, callback) {
-                console.log("inside Internal server error");
-                // TODO Error logs and send mail
-            });
-
-            server.on('restifyError', function(req, res, err, callback) {
-                console.log("inside Restify server error");
-                // TODO Error logs and send mail
-            });
-        //});
+        });
+        dbHelper.dbConnector.on('errorInConn', (err)=>{
+            console.error("DB connection Error "+err);
+            throw new Error(err);
+        });   
     });
 
+    // Universal Handler
+    server.on('InternalServer', function(req, res, err, callback) {
+        console.log("inside Internal server error ", err);
+        // TODO Error logs and send mail
+    });
+
+    server.on('restifyError', function(req, res, err, callback) {
+        console.log("inside Restify server error ", err);
+        // TODO Error logs and send mail
+    });
 }
 
 //Listen for dying workers
