@@ -7,6 +7,7 @@ const restify = require('restify');
 const restifyPlugins = require('restify-plugins');
 const cluster = require('cluster');
 const dbHelper = require('./helpers/db-helper');
+var errors = require('restify-errors');
 
 if (cluster.isMaster){
   // Count the machine's CPUs
@@ -29,7 +30,7 @@ else{
 
     // Server Starts to Listen
     server.listen(config.app.port, () => {   
-        console.log('Server is listening on port ${config.app.port}');
+        console.log('Server is listening on port '+config.app.port);
 
         // establish connection to mysql
         dbHelper.createConnection();
@@ -37,21 +38,16 @@ else{
             console.log('DB Connection established');
             require('./api-route')(server);
         });
-        dbHelper.dbConnector.on('errorInConn', (err)=>{
-            console.error("DB connection Error "+err);
-            throw new Error(err);
+        dbHelper.dbConnector.on('errorInConn', (err)=>{           
+            throw new errors.InternalServerError({"message":"DB not connected"});
         });   
     });
 
     // Universal Handler
     server.on('InternalServer', function(req, res, err, callback) {
+        //TODO log errors
         console.log("inside Internal server error ", err);
-        // TODO Error logs and send mail
-    });
-
-    server.on('restifyError', function(req, res, err, callback) {
-        console.log("inside Restify server error ", err);
-        // TODO Error logs and send mail
+        res.send(err);
     });
 }
 

@@ -7,7 +7,7 @@ var env = "Development";
 module.exports.envType = env;
 
 module.exports.database = {
-	url: 'mysql://connector:Pass1234@192.168.5.85/sample',
+	url: 'mysql://root:Pass1234@localhost/sample',
 	options: {
 		pool: {
 			max: 30,
