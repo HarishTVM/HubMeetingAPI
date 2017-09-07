@@ -3,10 +3,8 @@
 "strict mode";
 
 const errors = require('restify-errors');
+const cmsApiController = require('./controllers/cms-api-controller');
 
 module.exports = (server) =>{
-    server.get('/api/demo', (req, res, next)=>{
-        res.send(201);
-    });
+    server.get('/api/getCospaces',cmsApiController.getCospaces);
 }
-

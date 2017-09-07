@@ -9,6 +9,8 @@ const cluster = require('cluster');
 const dbHelper = require('./helpers/db-helper');
 var errors = require('restify-errors');
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+
 if (cluster.isMaster){
   // Count the machine's CPUs
   const CPUcount = require('os').cpus().length;     
@@ -38,7 +40,7 @@ else{
             console.log('DB Connection established');
             require('./api-route')(server);
         });
-        dbHelper.dbConnector.on('errorInConn', (err)=>{           
+        dbHelper.dbConnector.on('errorInConn', (err)=>{         
             throw new errors.InternalServerError({"message":"DB not connected"});
         });   
     });
