@@ -11,13 +11,13 @@ var errors = require('restify-errors');
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
-if (cluster.isMaster){
-  // Count the machine's CPUs
-  const CPUcount = require('os').cpus().length;     
-  for(var i=0; i<CPUcount; i++)  // Create a worker for each CPU
-        cluster.fork();  
-}
-else{		
+// if (cluster.isMaster){
+//   // Count the machine's CPUs
+//   const CPUcount = require('os').cpus().length;     
+//   for(var i=0; i<CPUcount; i++)  // Create a worker for each CPU
+//         cluster.fork();  
+// }
+// else{		
     // Server Creation
     const server = restify.createServer({
         name: config.app.name,
@@ -51,14 +51,14 @@ else{
         console.log("inside Internal server error ", err);
         res.send(err);
     });
-}
+// }
 
-//Listen for dying workers
-cluster.on('exit', function (worker) {
-    if(config.app.appStage){		
-        console.warn("Worker with ID "+worker.id+" died :(");
-        console.warn("\n:::::::::::: Server Restarting ::::::::::::\n");
-    }
-    // Replace the dead worker, 
-    cluster.fork();
-});
+// //Listen for dying workers
+// cluster.on('exit', function (worker) {
+//     if(config.app.appStage){		
+//         console.warn("Worker with ID "+worker.id+" died :(");
+//         console.warn("\n:::::::::::: Server Restarting ::::::::::::\n");
+//     }
+//     // Replace the dead worker, 
+//     cluster.fork();
+// });

@@ -25,6 +25,9 @@ module.exports.getRequest = (url)=>{
 module.exports.postRequest = (url, body)=>{
     let options = {
         method: "POST",
+        "content-type": 'text/plain',
+        connection :"Keep-Alive",
+        keepAlive : true,
         hostname: "192.168.5.27",
         port: "445",
         path: "/api/v1/"+url,
@@ -64,10 +67,10 @@ module.exports.deleteRequest = (url, body)=>{
     .then(()=>getResponse(options, body))
 };
 
-var getResponse = (options, body)=>{
+var getResponse = (options, parameter)=>{
     return new Promise((resolve, reject)=>{
         var xmlData = '';
-        var req = https.request(options, (res)=>{
+        var req = https.request(options, (res)=>{           
             res.setEncoding('utf8');
             res.on('data',  (chunk)=>{
                 xmlData+=chunk;
@@ -80,10 +83,11 @@ var getResponse = (options, body)=>{
             });
         });
 
-        if(typeof body != 'undefined' && body != null)
-            req.write(body);
+        if(typeof parameter != 'undefined' && parameter != null)
+            req.write(parameter);
 
         req.end();
+
         req.on('error',(err)=>{
             console.log(err);
         });

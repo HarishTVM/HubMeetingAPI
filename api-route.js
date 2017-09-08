@@ -6,5 +6,6 @@ const errors = require('restify-errors');
 const cmsApiController = require('./controllers/cms-api-controller');
 
 module.exports = (server) =>{
-    server.get('/api/getCospaces',cmsApiController.getCospaces);
+    server.get('/api/getCospaces', cmsApiController.getCospaces);
+    server.post('/api/createCospace', cmsApiController.createCospace);
 }
