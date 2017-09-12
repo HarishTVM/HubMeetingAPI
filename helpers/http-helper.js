@@ -4,7 +4,7 @@
 
 const errors = require('restify-errors');
 const xml2js = require('xml2js');
-var request = require('request');
+const request = require('request');
 
 var parseString = new xml2js.Parser({attrkey:"attrkey", explicitArray:false}).parseString;
 

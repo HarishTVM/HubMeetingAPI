@@ -14,7 +14,9 @@ module.exports.getCospaces = (req, res, next)=>{
 
 module.exports.createCospace = (req, res, next)=>{
     let cospace = req.body;
-    httpHelper.postRequest("coSpaces", "name="+cospace.name+"&uri="+cospace.uri+"&passcode="+cospace.passcode+"&defaultLayout="+cospace.defaultLayout)
+    
+   // httpHelper.postRequest("coSpaces","name="+cospace.name+"&uri="+cospace.uri+"&passcode="+cospace.passcode+"&defaultLayout="+cospace.defaultLayout+"&requireCallId=true")
+   //httpHelper.postRequest("coSpaces","name=Samplede2&uri=sample.6tdfg3.7&passcode=1234&defaultLayout=allEqual&cdrTag=a123")
     .then((response)=>baseController.sendResponseData("OK", response, res))
     .catch((err)=>new Promise.reject(new Error(err)));
 };
