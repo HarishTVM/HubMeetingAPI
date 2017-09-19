@@ -23,7 +23,7 @@ module.exports.postRequest = (url, parameter)=>{
     let options = { 
         method: 'POST',
         uri: 'https://192.168.5.27:445/api/v1/'+url,
-        headers: {'Authorization': 'Basic YXBpdXNlcjphcGlwYXNzd29yZA==', 'content-type': 'text/plain'},
+        headers: {'Authorization': 'Basic YXBpdXNlcjphcGlwYXNzd29yZA==','content-type': 'text/plain'},
         multipart:[{body: parameter}]
     };
     
@@ -35,7 +35,7 @@ module.exports.putRequest = (url, parameter)=>{
     let options = { 
         method: 'PUT',
         uri: 'https://192.168.5.27:445/api/v1/'+url,
-        headers: {'Authorization': 'Basic YXBpdXNlcjphcGlwYXNzd29yZA==', 'content-type': 'text/plain'},
+        headers: {'Authorization': 'Basic YXBpdXNlcjphcGlwYXNzd29yZA==','content-type': 'text/plain'},
         multipart:[{body: parameter}]
     };
 
