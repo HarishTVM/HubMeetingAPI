@@ -21,7 +21,7 @@ module.exports.app = {
 	name: 'API',
 	version: '1.0.0',
 	enableSSL: false,
-	port: 8080,
+	port: 9000,
 	appStage: true, // true for development and false for live
 	httpsCert: {
 		cert: './certificates/certificate.pem',
