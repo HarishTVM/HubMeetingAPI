@@ -15,8 +15,37 @@ module.exports.getCospaces = (req, res, next)=>{
 module.exports.createCospace = (req, res, next)=>{
     let cospace = req.body;
     
-   // httpHelper.postRequest("coSpaces","name="+cospace.name+"&uri="+cospace.uri+"&passcode="+cospace.passcode+"&defaultLayout="+cospace.defaultLayout+"&requireCallId=true")
-   //httpHelper.postRequest("coSpaces","name=Samplede2&uri=sample.6tdfg3.7&passcode=1234&defaultLayout=allEqual&cdrTag=a123")
+     httpHelper.postRequest("coSpaces","name="+cospace.name+"&uri="+cospace.uri+"&passcode="+cospace.passcode+"&defaultLayout="+cospace.defaultLayout+"&requireCallId=true")
+    //httpHelper.postRequest("coSpaces","name=Samplede12&uri=sample.21er333.7&passcode=1234&defaultLayout=allEqual&cdrTag=a123")
+    .then((response)=>baseController.sendResponseData("OK", response, res))
+    .catch((err)=>new Promise.reject(new Error(err)));
+    console.log(res);
+};
+
+module.exports.getCoSpacesUsers = (req, res, next)=>{
+    var coSpaceId = req.params.id;
+    console.log("querystring "+ coSpaceId);
+    httpHelper.getRequest("coSpaces/"+coSpaceId+"/coSpaceUsers")
     .then((response)=>baseController.sendResponseData("OK", response, res))
     .catch((err)=>new Promise.reject(new Error(err)));
 };
+
+module.exports.getCoSpacesUsersById = (req, res, next)=>{
+    var userId = req.params.id;
+    console.log("querystring "+ userId);
+    httpHelper.getRequest("users/"+userId+"/userCoSpaces")
+    .then((response)=>baseController.sendResponseData("OK", response, res))
+    .catch((err)=>new Promise.reject(new Error(err)));
+};
+
+
+module.exports.updateCospace = (req, res, next)=>{
+    // let cospaceId = req.params;
+    let cospace = req.body;
+    console.log(cospace);
+    
+    httpHelper.putRequest("coSpaces/"+cospace.coSpaceId , "name="+cospace.name+"&uri="+cospace.uri+"&passcode="+cospace.passcode+"&defaultLayout="+cospace.defaultLayout+"&requireCallId=true")
+    .then((response)=>baseController.sendResponseData("OK", response, res))
+    .catch((err)=>new Promise.reject(new Error(err)));
+};
+
