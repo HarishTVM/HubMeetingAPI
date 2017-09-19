@@ -58,7 +58,6 @@ module.exports.deleteRequest = (url, parameter)=>{
 var getResponse = (options)=>{
     return new Promise((resolve, reject)=>{
         request(options, (error, response, body) => {
-            if(error) throw error;
             if(response.statusCode >= 200 && response.statusCode < 400){
                 if(typeof body != 'undefined' && body != null){
                     parseString(body, (err, jsonData)=>{

@@ -40,18 +40,18 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
             console.log('DB Connection established');
             require('./api-route')(server);
         });
-        dbHelper.dbConnector.on('errorInConn', (err)=>{      
-            throw err;   
-            //throw new errors.InternalServerError({"message":"DB not connected"});
+        dbHelper.dbConnector.on('errorInConn', (err)=>{    
+            console.log(err)     
+           // throw new errors.InternalServerError({"message":"DB not connected"});
         });   
     });
 
     // Universal Handler
-    // server.on('InternalServer', function(req, res, err, callback) {
-    //     //TODO log errors
-    //     console.log("inside Internal server error ", err);
-    //     res.send(err);
-    // });
+    server.on('InternalServer', function(req, res, err, callback) {
+        //TODO log errors
+        console.log("inside Internal server error ", err);
+        res.send(err);
+    });
 // }
 
 // //Listen for dying workers
