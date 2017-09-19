@@ -48,7 +48,7 @@ module.exports.deleteRequest = (url, parameter)=>{
         method: 'DELETE',
         uri: 'https://192.168.5.27:445/api/v1/'+url,
         headers: {'Authorization': 'Basic YXBpdXNlcjphcGlwYXNzd29yZA==','content-type': 'text/plain'},
-        multipart:[{body: parameter}]
+       // multipart:[{body: parameter}]
     };
 
     return new Promise((resolve, reject)=> resolve())
@@ -58,6 +58,7 @@ module.exports.deleteRequest = (url, parameter)=>{
 var getResponse = (options)=>{
     return new Promise((resolve, reject)=>{
         request(options, (error, response, body) => {
+            if(error) throw error;
             if(response.statusCode >= 200 && response.statusCode < 400){
                 if(typeof body != 'undefined' && body != null){
                     parseString(body, (err, jsonData)=>{

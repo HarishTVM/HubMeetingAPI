@@ -41,7 +41,8 @@ process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
             require('./api-route')(server);
         });
         dbHelper.dbConnector.on('errorInConn', (err)=>{    
-            console.log(err)     
+            throw err;
+           // console.log(err)     
            // throw new errors.InternalServerError({"message":"DB not connected"});
         });   
     });

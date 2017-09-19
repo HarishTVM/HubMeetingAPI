@@ -11,4 +11,6 @@ module.exports = (server) =>{
     server.get('/api/getCoSpacesUsers/:id', cmsApiController.getCoSpacesUsers);
     server.get('/api/getCoSpacesUsersById/:id', cmsApiController.getCoSpacesUsersById);
     server.put('/api/updateCospace', cmsApiController.updateCospace);
+    server.del('/api/deleteCospaceUser', cmsApiController.deleteCospaceUser);
+    server.post('/api/addUserInCospace', cmsApiController.addUserInCospace);
 }
