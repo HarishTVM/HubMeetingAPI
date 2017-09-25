@@ -35,9 +35,11 @@ module.exports.putRequest = (url, parameter)=>{
     let options = { 
         method: 'PUT',
         uri: 'https://192.168.5.27:445/api/v1/'+url,
-        headers: {'Authorization': 'Basic YXBpdXNlcjphcGlwYXNzd29yZA==','content-type': 'text/plain'},
-        multipart:[{body: parameter}]
+        headers: {'Authorization': 'Basic YXBpdXNlcjphcGlwYXNzd29yZA==','content-type': 'text/plain'}
     };
+
+    if(typeof parameter != 'undefined' && parameter != null)
+        options.multipart = [{body: parameter}]
 
     return new Promise((resolve, reject)=> resolve())
     .then(()=>getResponse(options))
@@ -47,9 +49,11 @@ module.exports.deleteRequest = (url, parameter)=>{
     let options = { 
         method: 'DELETE',
         uri: 'https://192.168.5.27:445/api/v1/'+url,
-        headers: {'Authorization': 'Basic YXBpdXNlcjphcGlwYXNzd29yZA==','content-type': 'text/plain'},
-       // multipart:[{body: parameter}]
+        headers: {'Authorization': 'Basic YXBpdXNlcjphcGlwYXNzd29yZA==','content-type': 'text/plain'}
     };
+
+    if(typeof parameter != 'undefined' && parameter != null)
+        options.multipart = [{body: parameter}]
 
     return new Promise((resolve, reject)=> resolve())
     .then(()=>getResponse(options))
@@ -59,6 +63,7 @@ var getResponse = (options)=>{
     return new Promise((resolve, reject)=>{
         request(options, (error, response, body) => {
             if(error) throw error;
+            console.log(response.statusCode);
             if(response.statusCode >= 200 && response.statusCode < 400){
                 if(typeof body != 'undefined' && body != null){
                     parseString(body, (err, jsonData)=>{
@@ -70,6 +75,7 @@ var getResponse = (options)=>{
                     resolve(body);               
             } 
             else {
+                console.log("inside");
                 parseString(body, (err, jsonData)=>{
                     if(err) console.log(err);
                     resolve(jsonData);

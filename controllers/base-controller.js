@@ -9,3 +9,7 @@ module.exports.sendResponseData = (result, data, res)=>{
 module.exports.sendCustomError = (result, data, res)=>{
     res.send(200, {"code":result, "data":data});
 };
+
+module.exports.sendUnhandledError = (result, data, res)=>{
+    res.send(500, {"code":"UNHANDLED ERROR", "data":data});
+};
