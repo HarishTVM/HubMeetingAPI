@@ -22,21 +22,16 @@ module.exports.createCospace = (req, res, next)=>{
 };
 
 module.exports.getCoSpacesUsers = (req, res, next)=>{
-    var coSpaceId = req.params.id;
-
-    httpHelper.getRequest("coSpaces/"+coSpaceId+"/coSpaceUsers")
+    httpHelper.getRequest("coSpaces/"+req.query.cospaceid+"/coSpaceUsers")
     .then((response)=>baseController.sendResponseData("OK", response, res))
     .catch((err)=>baseController.sendUnhandledError("", err, res));
 };
 
 module.exports.getCoSpacesUsersById = (req, res, next)=>{
-    var userId = req.params.id;
-
-    httpHelper.getRequest("users/"+userId+"/userCoSpaces")
+    httpHelper.getRequest("users/"+req.query.userid+"/userCoSpaces")
     .then((response)=>baseController.sendResponseData("OK", response, res))
     .catch((err)=>baseController.sendUnhandledError("", err, res));
 };
-
 
 module.exports.updateCospace = (req, res, next)=>{
     let cospace = req.body;
