@@ -5,20 +5,23 @@
 const config = require('../web-config');
 const sequelize = require('sequelize');
 const events = require('events');
-const db = new sequelize(config.database.url, config.database.options);
+const dbConnection = new sequelize(config.database.url, config.database.options);
 
 const dbConnector = new events.EventEmitter();
+let isDbConnected = false;
 
 module.exports.createConnection = () => {
-    db
+    dbConnection
     .authenticate()
-    .then(()=>{        
-        dbConnector.emit('connected', db);
+    .then(()=>{   
+        isDbConnected = true;     
+        dbConnector.emit('connected', dbConnection);
     })
     .catch((err)=>{
+        isDbConnected = false;
         dbConnector.emit('errorInConn', err);
     })
 };
 
-module.exports.db = db;
+module.exports.dbConnection = dbConnection;
 module.exports.dbConnector = dbConnector;
