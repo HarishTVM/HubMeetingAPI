@@ -22,12 +22,12 @@ const UserLogin = model.userLogin;
             if(user != null){
                 if(user.isFirstTime && (user.userPassword == data.password)){
                     user.isFirstTime = false;
-                    updateUser(user)
+                    _updateUser(user)
                     return user;
                 }                 
                 else {
-                    let hashString = utility.hashString(user.userPassword);
-                    if(user.password == hashString)
+                    let hashString = utility.hashString(data.userPassword);
+                    if(user.userPassword == hashString)
                         return user;
                     else
                         return Promise.reject(new errors.UnauthorizedError({message: "Password Mismatch", context: {errorType:cmsTypes.results.CUSTOM_ERROR, customErrCode: cmsTypes.status.PASSWORD_INCORRECT}}));
@@ -38,11 +38,21 @@ const UserLogin = model.userLogin;
         });
     };
 
+    changeUserLoginPassword = (data)=>{
+        return new Promise((resolve, reject) => resolve())
+        .then(()=>_getLoginUserById(data.userID))
+        .then((user)=>{
+            user.userPassword = utility.hashString(data.userPassword);
+            user.changePassword = true;
+            return _updateUser(user);
+        });
+    };
+
 /******---------------------------------------------- END OF ADAPTER METHODS ----------------------------------------------------------------------------------------***/
 /******---------------------------------------------- BEGIN OF INNER METHODS ----------------------------------------------------------------------------------------***/
 
 // BEGIN General Methods
-    updateUser = (user)=>{
+    _updateUser = (user)=>{
         return new Promise((resolve, reject) => resolve())
         .then(()=>UserLogin.update(
                                     {userName: user.userName, userPassword: user.userPassword, userLevelID: user.userLevelID, lastLoginDate: user.lastLoginDate, changePassword: user.changePassword, isFirstTime: user.isFirstTime},
@@ -50,8 +60,24 @@ const UserLogin = model.userLogin;
                                 ));
         
     };
+
+    _getLoginUserById =  (userId) => {
+        return new Promise((resolve, reject) => resolve())
+        .then(()=>UserLogin.findOne({
+            where: {
+                userID: userId
+            }
+        }))
+        .then((user)=>{
+            if(user == null)
+                return Promise.reject(new errors.UnauthorizedError({message: "User not Exists", context: {errorType:cmsTypes.results.CUSTOM_ERROR, customErrCode: cmsTypes.status.UNKNOWN_USER}}));
+            else
+                return user;
+        })
+    }
 // END General Methods
 
 /******---------------------------------------------- END OF INNER METHODS ------------------------------------------------------------------------------------------***/
 
 module.exports.authenticateUser = authenticateUser;
+module.exports.changeUserLoginPassword = changeUserLoginPassword;

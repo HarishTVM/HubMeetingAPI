@@ -7,6 +7,7 @@ const baseController = require('./base-controller');
 const userAdapter = require('../bll/user-adapter');
 const configAdapter = require('../bll/configuration-adapter');
 const cmsTypes = require('../cms-types');
+const utility = require('../helpers/utility');
 
 module.exports.authenticateUser = (req, res, next) => {
     userAdapter.authenticateUser(req.query)
@@ -22,5 +23,11 @@ module.exports.authenticateUser = (req, res, next) => {
             return baseController.sendResponseData(cmsTypes.results.OK, result, res);
         })
     })
+    .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+};
+
+module.exports.changeUserLoginPassword = (req, res, next) => {
+    userAdapter.changeUserLoginPassword(req.body)
+    .then(()=>baseController.sendResponseData(cmsTypes.results.OK, "", res))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 };
