@@ -29,6 +29,10 @@ module.exports.app = {
 	httpsCert: {
 		cert: './certificates/certificate.pem',
 		key: './certificates/privatekey.pem',
+	},
+	hashString:{
+		cryptoAlgorithm: 'aes-256-ctr', // Do not alter
+		cryptoPassword: 'd6F3Efeq' // Do not alter
 	}
 };
 

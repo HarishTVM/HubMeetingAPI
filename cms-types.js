@@ -13,7 +13,8 @@ module.exports.status = {
     SUCCESS: 200,
 
     /** User Login Related Status **/
-    UNKNOWN_USER: 1
+    UNKNOWN_USER: 1,
+    PASSWORD_INCORRECT: 2
 };
 
 module.exports.userLevel = {
