@@ -21,9 +21,10 @@ const UserLogin = model.userLogin;
         .then((user)=>{
             if(user != null){
                 if(user.isFirstTime && (user.userPassword == data.password)){
+                    let _user = user;
                     user.isFirstTime = false;
-                    updateUser(user)
-                    return user;
+                    updateUser(user);
+                    return _user;
                 }                 
                 else {
                     let hashString = utility.hashString(user.userPassword);
