@@ -10,6 +10,48 @@ const cmsTypes = require('../cms-types');
 const utility = require('../helpers/utility');
 const httpHelper = require('../helpers/http-helper');
 
+/**
+ * @swagger
+ * /authenticateUser:
+ *   post:
+ *     summary: Login/Authenticate a user
+ *     description: The AuthenticateUser endpoint returns information about the Users ID, Name, Email, Locations and vehicles of the user
+ *     produces:
+ *       - application/json
+ *     consumes:
+ *       - application/json
+ *     parameters:
+ *       - name: email
+ *         description: User's Email Or Mobile Number to use for login.
+ *         in: body
+ *         required: true
+ *         type: string
+ *       - name: password
+ *         description: User's Password for login.
+ *         in: body
+ *         required: true
+ *         type: string
+ *       - name: allow_notification
+ *         description: Receive Notification Or Not.
+ *         in: body
+ *         required: false
+ *         type: boolean
+ *       - name: device_id
+ *         description: User Device ID Or Notification ID .
+ *         in: body
+ *         required: false
+ *         type: string
+ *       - name: device_type
+ *         description: User Device Type (IOS Or Android) .
+ *         in: body
+ *         required: false
+ *         type: string
+ *     tags:
+ *       - User
+ *     responses:
+ *       200:
+ *         description: login
+ */
 module.exports.authenticateUser = (req, res, next) => {
     userAdapter.authenticateUser(req.query)
     .then((result)=>{

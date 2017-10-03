@@ -8,6 +8,26 @@ const restifyPlugins = require('restify-plugins');
 const cluster = require('cluster');
 const dbHelper = require('./helpers/db-helper');
 var errors = require('restify-errors');
+var swaggerJSDoc = require('swagger-jsdoc');
+
+	// Swagger definition
+	var swaggerDefinition = {
+        swagger: "2.0",
+		info: {
+            "version": "1.0.0",
+            "title": "Meeting Hub (CMS)",
+        },
+        host: "localhost:9000",
+        basePath: "/api",
+	};
+	
+	var options = {
+		swaggerDefinition: swaggerDefinition,
+		// Path to the API docs
+		apis: ['./controllers/*.js'],
+	};
+
+    var swaggerSpec = swaggerJSDoc(options);
 
 
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
@@ -31,6 +51,15 @@ else{
     server.use(restifyPlugins.queryParser({ mapParams: true }));
     server.use(restifyPlugins.fullResponse());
   
+
+    server.get('api-docs.json', (req, res, next)=>{
+        res.send(200, swaggerSpec);
+    });
+    server.get('/', restify.plugins.serveStatic({
+        directory: './swagger',
+        default: 'index.html'
+    }));
+
 
     // Server Starts to Listen
     server.listen(config.app.port, () => {   
