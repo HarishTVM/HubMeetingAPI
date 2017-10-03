@@ -9,6 +9,7 @@ const cluster = require('cluster');
 const dbHelper = require('./helpers/db-helper');
 var errors = require('restify-errors');
 
+
 process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
 
 if (cluster.isMaster){
@@ -29,6 +30,7 @@ else{
     server.use(restifyPlugins.acceptParser(server.acceptable));
     server.use(restifyPlugins.queryParser({ mapParams: true }));
     server.use(restifyPlugins.fullResponse());
+  
 
     // Server Starts to Listen
     server.listen(config.app.port, () => {   

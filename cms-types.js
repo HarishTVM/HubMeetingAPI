@@ -20,3 +20,8 @@ module.exports.status = {
 module.exports.userLevel = {
     ADMINISTRATOR:0
 };
+
+module.exports.test = {
+    GET_COSPACES :"/coSpaces",
+    GET_USERS :"/users",
+}

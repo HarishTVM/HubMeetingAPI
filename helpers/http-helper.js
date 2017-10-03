@@ -5,18 +5,20 @@
 const errors = require('restify-errors');
 const xml2js = require('xml2js');
 const request = require('request');
+const cmsTypes = require('../cms-types');
 
 var parseString = new xml2js.Parser({attrkey:"attrkey", explicitArray:false}).parseString;
 
-module.exports.getRequest = (url)=>{
+module.exports.getRequest = (url,authorization)=>{
     let options = { 
         method: 'GET',
-        uri: 'https://192.168.5.27:445/api/v1/'+url,
-        headers: {'Authorization': 'Basic YXBpdXNlcjphcGlwYXNzd29yZA==','content-type': 'text/plain'}
+        uri: url+cmsTypes.test.GET_COSPACES,
+        headers: {'Authorization': authorization,'content-type': 'text/plain'}
     };
 
     return new Promise((resolve, reject)=> resolve())
     .then(()=>getResponse(options))
+
 };
 
 module.exports.postRequest = (url, parameter)=>{
