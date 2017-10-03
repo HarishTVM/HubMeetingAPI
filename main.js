@@ -7,8 +7,18 @@ const restify = require('restify');
 const restifyPlugins = require('restify-plugins');
 const cluster = require('cluster');
 const dbHelper = require('./helpers/db-helper');
-var errors = require('restify-errors');
-var swaggerJSDoc = require('swagger-jsdoc');
+const errors = require('restify-errors');
+const swaggerJSDoc = require('swagger-jsdoc');
+const corsMiddleware = require('restify-cors-middleware')
+
+const cors = corsMiddleware({
+    origins: ['*'],
+    allowHeaders: ['Origin, X-Requested-With, Content-Type, Accept, Key'],
+    exposeHeaders: ['*'],
+    allowMethods:['GET, PUT, POST, DELETE, OPTIONS, HEAD'],
+    allowCredentials:['true']
+})
+
 
 	// Swagger definition
 	var swaggerDefinition = {
@@ -49,6 +59,8 @@ else{
     server.use(restifyPlugins.acceptParser(server.acceptable));
     server.use(restifyPlugins.queryParser({ mapParams: true }));
     server.use(restifyPlugins.fullResponse());
+    server.pre(cors.preflight);
+    server.use(cors.actual);
 
     server.get('api-docs.json', (req, res, next)=>{
         res.send(200, swaggerSpec);
