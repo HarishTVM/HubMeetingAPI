@@ -56,16 +56,13 @@ else{
     });
 
     // Middleware
+    server.pre(cors.preflight);
+    server.use(cors.actual);
     server.use(restifyPlugins.jsonBodyParser({ mapParams: true }));
     server.use(restifyPlugins.acceptParser(server.acceptable));
     server.use(restifyPlugins.queryParser({ mapParams: true }));
     server.use(restifyPlugins.fullResponse());
-<<<<<<< HEAD
-    server.pre(cors.preflight);
-    server.use(cors.actual);
-=======
   
->>>>>>> 4725406cd193dd6f42e2d1199b4b2f9779f6b7a1
 
     server.get('api-docs.json', (req, res, next)=>{
         res.send(200, swaggerSpec);
