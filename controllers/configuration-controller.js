@@ -22,7 +22,7 @@ module.exports.checkCmsApiUrl = (req, res, next) =>{
     config.cmsAuth.apiUser = data.apiUserName;
     config.cmsAuth.apiPassword = data.apiPassword;
 
-    httpHelper.getRequest(cmsTypes.CmsApis.GET_COSPACES)
+    httpHelper.getRequest(cmsTypes.CmsApis.COSPACES)
     .then((response)=>configAdapter.insertCmsApiUrl(data))
     .then((response)=>baseController.sendResponseData(cmsTypes.results.OK, "", res))
     .catch((err)=>{

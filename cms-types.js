@@ -11,6 +11,7 @@ module.exports.results = {
 
 module.exports.status = {
     SUCCESS: 200,
+    BAD_REQUEST: 400,
 
     /** User Login Related Status **/
     UNKNOWN_USER: 1,

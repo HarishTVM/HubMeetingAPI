@@ -77,6 +77,7 @@ var getResponse = (options)=>{
         request(options, (error, response, body) => {
             if(error)reject(new Error(error));
             else{
+                console.log(response.statusCode);
                 if(response.statusCode >= 200 && response.statusCode < 400){
                     if(typeof body != 'undefined' && body != null){
                         parseString(body, (err, jsonData)=>{
@@ -90,9 +91,11 @@ var getResponse = (options)=>{
                 else {
                     if(response.statusCode == 401)
                         reject(new errors.UnauthorizedError({message: "Unauthorized to access API", context: {errorType:cmsTypes.results.CUSTOM_ERROR, customErrCode: cmsTypes.status.USERNAME_OR_PASSWORD_INCORRECT}}));
+                    if(response.statusCode == 400)
+                        reject(new errors.BadRequestError({message: body.toString(), context: {errorType:cmsTypes.results.CUSTOM_ERROR, customErrCode: cmsTypes.status.BAD_REQUEST}}));
                     parseString(body, (err, jsonData)=>{
                         if(err)reject(new Error(err))
-                        resolve(jsonData);
+                        reject(new Error(jsonData));
                     });
                 }  
             }    
