@@ -6,7 +6,9 @@ var env = "Development";
 
 var cmsAuth = {
 	apiUser : null,
-	apiPassword : null
+	apiPassword : null,
+	base64Encode : null,
+	apiUrl : null
 }
 
 module.exports.envType = env;
@@ -15,7 +17,8 @@ module.exports.database = {
 	url: 'mysql://root:Pass1234@localhost/sample',
 	options: {
 		define: {
-			freezeTableName: true
+			freezeTableName: true,
+			paranoid: true
 		},
 		pool: {
 			max: 30,

@@ -6,26 +6,35 @@ const errors = require('restify-errors');
 const xml2js = require('xml2js');
 const request = require('request');
 const cmsTypes = require('../cms-types');
+const config = require('../web-config');
 
 var parseString = new xml2js.Parser({attrkey:"attrkey", explicitArray:false}).parseString;
 
-module.exports.getRequest = (url,authorization)=>{
+getAuth = ()=>{
+    if(config.cmsAuth.apiUser != null)
+        return config.cmsAuth.base64Encode = 'Basic ' + new Buffer(config.cmsAuth.apiUser + ':' + config.cmsAuth.apiPassword).toString('base64'); 
+    else
+        return null;
+}
+
+module.exports.getRequest = (url)=>{
     let options = { 
         method: 'GET',
-        uri: url+cmsTypes.test.GET_COSPACES,
-        headers: {'Authorization': authorization,'content-type': 'text/plain'}
+        uri: config.cmsAuth.apiUrl + url,
+        timeout: 1500,
+        headers:{'Authorization': getAuth() ,'content-type': 'text/plain'},
     };
 
     return new Promise((resolve, reject)=> resolve())
     .then(()=>getResponse(options))
-
 };
 
 module.exports.postRequest = (url, parameter)=>{
     let options = { 
         method: 'POST',
-        uri: 'https://192.168.5.27:445/api/v1/'+url,
-        headers: {'Authorization': 'Basic YXBpdXNlcjphcGlwYXNzd29yZA==','content-type': 'text/plain'},
+        uri: config.cmsAuth.apiUrl + url,
+        timeout: 1500,
+        headers: {'Authorization': getAuth(),'content-type': 'text/plain'},
         multipart:[{body: parameter}]
     };
     
@@ -36,8 +45,9 @@ module.exports.postRequest = (url, parameter)=>{
 module.exports.putRequest = (url, parameter)=>{
     let options = { 
         method: 'PUT',
-        uri: 'https://192.168.5.27:445/api/v1/'+url,
-        headers: {'Authorization': 'Basic YXBpdXNlcjphcGlwYXNzd29yZA==','content-type': 'text/plain'}
+        uri: config.cmsAuth.apiUrl + url,
+        timeout: 1500,
+        headers: {'Authorization': getAuth(),'content-type': 'text/plain'}
     };
 
     if(typeof parameter != 'undefined' && parameter != null)
@@ -50,8 +60,9 @@ module.exports.putRequest = (url, parameter)=>{
 module.exports.deleteRequest = (url, parameter)=>{
     let options = { 
         method: 'DELETE',
-        uri: 'https://192.168.5.27:445/api/v1/'+url,
-        headers: {'Authorization': 'Basic YXBpdXNlcjphcGlwYXNzd29yZA==','content-type': 'text/plain'}
+        uri:  config.cmsAuth.apiUrl + url,
+        timeout: 1500,
+        headers: {'Authorization': getAuth(),'content-type': 'text/plain'}
     };
 
     if(typeof parameter != 'undefined' && parameter != null)
@@ -64,25 +75,27 @@ module.exports.deleteRequest = (url, parameter)=>{
 var getResponse = (options)=>{
     return new Promise((resolve, reject)=>{
         request(options, (error, response, body) => {
-            if(error) throw error;
-            console.log(response.statusCode);
-            if(response.statusCode >= 200 && response.statusCode < 400){
-                if(typeof body != 'undefined' && body != null){
+            if(error)reject(new Error(error));
+            else{
+                if(response.statusCode >= 200 && response.statusCode < 400){
+                    if(typeof body != 'undefined' && body != null){
+                        parseString(body, (err, jsonData)=>{
+                            if(err)reject(new Error(err));
+                            resolve(jsonData);
+                        });
+                    }
+                    else
+                        resolve(body);               
+                } 
+                else {
+                    if(response.statusCode == 401)
+                        reject(new errors.UnauthorizedError({message: "Unauthorized to access API", context: {errorType:cmsTypes.results.CUSTOM_ERROR, customErrCode: cmsTypes.status.USERNAME_OR_PASSWORD_INCORRECT}}));
                     parseString(body, (err, jsonData)=>{
-                        if(err) console.log(err);
+                        if(err)reject(new Error(err))
                         resolve(jsonData);
                     });
-                }
-                else
-                    resolve(body);               
-            } 
-            else {
-                console.log("inside");
-                parseString(body, (err, jsonData)=>{
-                    if(err) console.log(err);
-                    resolve(jsonData);
-                });
-            }      
+                }  
+            }    
         });
     });   
 };

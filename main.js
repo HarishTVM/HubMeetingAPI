@@ -83,6 +83,16 @@ else{
             console.log('DB Connection established');
             require('./models/cms-models');
             require('./api-route');
+            var configurationAdapter = require('./bll/configuration-adapter');
+            configurationAdapter.getApiConfiguration()
+            .then((result)=>{
+                if(result!=null)
+                {
+                    config.cmsAuth.apiUrl = result.apiUrl;
+                    config.cmsAuth.apiPassword = result.apiPassword;
+                    config.cmsAuth.apiUser = result.apiUserName;
+                }
+            })
         });
         dbHelper.dbConnector.on('errorInConn', (err)=>{    
             throw err;

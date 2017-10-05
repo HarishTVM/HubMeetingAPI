@@ -14,14 +14,17 @@ module.exports.status = {
 
     /** User Login Related Status **/
     UNKNOWN_USER: 1,
-    PASSWORD_INCORRECT: 2
+    PASSWORD_INCORRECT: 2,
+
+    /** CMS API Related Status **/
+    USERNAME_OR_PASSWORD_INCORRECT:100
 };
 
 module.exports.userLevel = {
     ADMINISTRATOR:0
 };
 
-module.exports.test = {
-    GET_COSPACES :"/coSpaces",
-    GET_USERS :"/users",
+module.exports.CmsApis = {
+    GET_COSPACES :"coSpaces",
+    GET_USERS :"users",
 }

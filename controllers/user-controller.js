@@ -62,6 +62,7 @@ module.exports.authenticateUser = (req, res, next) => {
             return configAdapter.getSmtpConfigurationCount();      
         })
         .then((smtpCount)=>{
+            console.log(smtpCount);
             result.isSmtpConfigured = (smtpCount > 0) ? true : false;  
             return baseController.sendResponseData(cmsTypes.results.OK, result, res);
         })
