@@ -25,6 +25,8 @@ module.exports.userLevel = {
 };
 
 module.exports.CmsApis = {
-    GET_COSPACES :"coSpaces",
-    GET_USERS :"users",
+    COSPACES :"coSpaces",
+    USERS :"users",
+    COSPACEUSERS:"coSpaceUsers",
+    USERCOSPACES:"userCoSpaces"
 }

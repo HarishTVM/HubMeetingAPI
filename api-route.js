@@ -17,6 +17,6 @@ server.del('/api/deleteCospaceUser', cmsApiController.deleteCospaceUser);
 server.post('/api/addUserInCospace', cmsApiController.addUserInCospace);
 
 // LoginUser Related API
-server.get('/api/authenticateUser', userController.authenticateUser);
+server.post('/api/authenticateUser', userController.authenticateUser);
 server.put('/api/changeUserLoginPassword', userController.changeUserLoginPassword);
 server.post('/api/checkCmsApiUrl', configurationController.checkCmsApiUrl);

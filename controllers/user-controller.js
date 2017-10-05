@@ -53,7 +53,7 @@ const httpHelper = require('../helpers/http-helper');
  *         description: login
  */
 module.exports.authenticateUser = (req, res, next) => {
-    userAdapter.authenticateUser(req.query)
+    userAdapter.authenticateUser(req.body)
     .then((result)=>{
         return new Promise((resolve, reject) => resolve())
         .then(()=>configAdapter.getApiConfigurationCount())
