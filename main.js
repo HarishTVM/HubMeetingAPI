@@ -55,6 +55,15 @@ else{
     server.get('api-docs.json', (req, res, next)=>{
         res.send(200, swaggerSpec);
     });
+    server.get('/swagger-ui-bundle.js', restify.plugins.serveStatic({
+        directory: './swagger'
+    }));
+    server.get('/swagger-ui-standalone-preset.js', restify.plugins.serveStatic({
+        directory: './swagger'
+    }));
+    server.get('/swagger-ui.css', restify.plugins.serveStatic({
+        directory: './swagger'
+    }));
     server.get('/', restify.plugins.serveStatic({
         directory: './swagger',
         default: 'index.html'
