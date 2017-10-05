@@ -20,7 +20,7 @@ const UserLogin = model.userLogin;
         }))
         .then((user)=>{
             if(user != null){
-                if(user.isFirstTime && (user.userPassword == data.password)){
+                if(user.isFirstTime && (user.userPassword == data.userPassword)){
                     let _user = user;
                     user.isFirstTime = false;
                     _updateUser(user)

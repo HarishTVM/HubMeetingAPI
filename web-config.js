@@ -4,6 +4,11 @@
 
 var env = "Development";
 
+var cmsAuth = {
+	apiUser : null,
+	apiPassword : null
+}
+
 module.exports.envType = env;
 
 module.exports.database = {
@@ -39,3 +44,5 @@ module.exports.app = {
 module.exports.errorLog = {
 	filePath: "./Errorlog/log.txt",
 };
+
+module.exports.cmsAuth = cmsAuth;
