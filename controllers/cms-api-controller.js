@@ -10,22 +10,43 @@ const cmsTypes = require('../cms-types');
 module.exports.getCospaces = (req, res, next)=>{
     let limit = req.query.limit;
     let offset = req.query.offset;
-    httpHelper.getRequest(cmsTypes.CmsApis.COSPACES+"?limit="+limit+"&offset="+offset)
-    .then((response)=>baseController.sendResponseData(cmsTypes.results.OK, response, res))
-    .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+    let filter = req.query.filter;
+    if(filter == undefined || filter == null){
+        httpHelper.getRequest(cmsTypes.CmsApis.COSPACES+"?limit="+limit+"&offset="+offset)
+        .then((response)=>baseController.sendResponseData(cmsTypes.results.OK, response, res))
+        .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+    }
+    else
+    {
+        httpHelper.getRequest(cmsTypes.CmsApis.COSPACES+"?limit="+limit+"&offset="+offset+"&filter="+filter)
+        .then((response)=>baseController.sendResponseData(cmsTypes.results.OK, response, res))
+        .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+    } 
 };
 
 module.exports.createCospace = (req, res, next)=>{
     let cospace = req.body;
-    httpHelper.postRequest(cmsTypes.CmsApis.COSPACES,"name="+cospace.name+"&uri="+cospace.uri+"&passcode="+cospace.passcode+"&defaultLayout="+cospace.defaultLayout+"cdrTag="+cospace.cdrTag)
+    console.log(cospace);
+    httpHelper.postRequest(cmsTypes.CmsApis.COSPACES,"name="+cospace.name+"&uri="+cospace.uri+"&passcode="+cospace.passcode+"&defaultLayout="+cospace.defaultLayout+"&cdrTag="+cospace.cdrTag)
     .then((response)=>baseController.sendResponseData(cmsTypes.results.OK, response, res))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 };
 
 module.exports.getCoSpacesUsers = (req, res, next)=>{
-    httpHelper.getRequest(cmsTypes.CmsApis.COSPACES+"/"+req.query.cospaceid+"/"+cmsTypes.CmsApis.COSPACEUSERS)
-    .then((response)=>baseController.sendResponseData(cmsTypes.results.OK, response, res))
-    .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+    let limit = req.query.limit;
+    let offset = req.query.offset;
+    let filter = req.query.filter;
+    if(filter == undefined || filter == null){
+        httpHelper.getRequest(cmsTypes.CmsApis.COSPACES+"/"+req.query.cospaceid+"/"+cmsTypes.CmsApis.COSPACEUSERS+"?limit="+limit+"&offset="+offset)
+        .then((response)=>baseController.sendResponseData(cmsTypes.results.OK, response, res))
+        .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+    }
+    else
+    {
+        httpHelper.getRequest(cmsTypes.CmsApis.COSPACES+"/"+req.query.cospaceid+"/"+cmsTypes.CmsApis.COSPACEUSERS+"?limit="+limit+"&offset="+offset+"&filter="+filter)
+        .then((response)=>baseController.sendResponseData(cmsTypes.results.OK, response, res))
+        .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+    } 
 };
 
 module.exports.getCoSpacesUsersById = (req, res, next)=>{
@@ -36,8 +57,7 @@ module.exports.getCoSpacesUsersById = (req, res, next)=>{
 
 module.exports.updateCospace = (req, res, next)=>{
     let cospace = req.body;
-
-    httpHelper.putRequest(cmsTypes.CmsApis.COSPACES+"/"+cospace.coSpaceId , "name="+cospace.name+"&uri="+cospace.uri+"&passcode="+cospace.passcode+"&defaultLayout="+cospace.defaultLayout)
+    httpHelper.putRequest(cmsTypes.CmsApis.COSPACES+"/"+cospace.coSpaceId , "name="+cospace.name+"&uri="+cospace.uri+"&passcode="+cospace.passcode+"&defaultLayout="+cospace.defaultLayout+"&cdrTag="+cospace.cdrTag)
     .then((response)=>baseController.sendResponseData(cmsTypes.results.OK, response, res))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 };

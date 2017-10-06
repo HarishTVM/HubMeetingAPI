@@ -37,7 +37,6 @@ module.exports.postRequest = (url, parameter)=>{
         headers: {'Authorization': getAuth(),'content-type': 'text/plain'},
         multipart:[{body: parameter}]
     };
-    
     return new Promise((resolve, reject)=> resolve())
     .then(()=>getResponse(options))
 };
