@@ -76,7 +76,6 @@ var getResponse = (options)=>{
         request(options, (error, response, body) => {
             if(error)reject(new Error(error));
             else{
-                console.log(response.statusCode);
                 if(response.statusCode >= 200 && response.statusCode < 400){
                     if(typeof body != 'undefined' && body != null){
                         parseString(body, (err, jsonData)=>{
