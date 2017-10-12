@@ -9,12 +9,15 @@ const configurationController = require('./controllers/configuration-controller'
 const server = require('./main').server;
 
 server.get('/api/getCospaces', cmsApiController.getCospaces);
+server.get('/api/getCospacesbyId', cmsApiController.getCospacesbyId);
 server.post('/api/createCospace', cmsApiController.createCospace);
 server.get('/api/getCoSpacesUsers', cmsApiController.getCoSpacesUsers);
 server.get('/api/getCoSpacesUsersById', cmsApiController.getCoSpacesUsersById);
 server.put('/api/updateCospace', cmsApiController.updateCospace);
 server.del('/api/deleteCospaceUser', cmsApiController.deleteCospaceUser);
 server.post('/api/addUserInCospace', cmsApiController.addUserInCospace);
+server.get('/api/getUsers', cmsApiController.getUsers);
+
 
 // LoginUser Related API
 server.post('/api/authenticateUser', userController.authenticateUser);

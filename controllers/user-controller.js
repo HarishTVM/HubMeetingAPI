@@ -21,8 +21,8 @@ const httpHelper = require('../helpers/http-helper');
  *     consumes:
  *       - application/json
  *     parameters:
- *       - name: email
- *         description: User's Email Or Mobile Number to use for login.
+ *       - name: username
+ *         description: User's Name to use for login.
  *         in: body
  *         required: true
  *         type: string
@@ -30,21 +30,6 @@ const httpHelper = require('../helpers/http-helper');
  *         description: User's Password for login.
  *         in: body
  *         required: true
- *         type: string
- *       - name: allow_notification
- *         description: Receive Notification Or Not.
- *         in: body
- *         required: false
- *         type: boolean
- *       - name: device_id
- *         description: User Device ID Or Notification ID .
- *         in: body
- *         required: false
- *         type: string
- *       - name: device_type
- *         description: User Device Type (IOS Or Android) .
- *         in: body
- *         required: false
  *         type: string
  *     tags:
  *       - User

@@ -2,6 +2,8 @@
 "esversion:6";
 "strict mode";
 
+process.env.UV_THREADPOOL_SIZE = 128;
+
 const config = require('./web-config');
 const restify = require('restify');
 const restifyPlugins = require('restify-plugins');
