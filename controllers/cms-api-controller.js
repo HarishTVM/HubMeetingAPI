@@ -21,14 +21,18 @@ module.exports.getCospaces = (req, res, next)=>{
        
     httpHelper.getRequest(finalReq)
     .then((response)=>{ 
-        if(response.coSpaces.attrkey.total < 2)
-            return baseController.sendResponseData(cmsTypes.results.OK, {'total': response.coSpaces.attrkey.total, 'coSpaces': response.coSpaces.coSpace} , res);
-        else{
-            let promiseRef = [];
-            response.coSpaces.coSpace.forEach((coSpace)=>promiseRef.push(httpHelper.getRequest(cmsTypes.CmsApis.COSPACES + "/" + coSpace.attrkey.id)));
-            Promise.all(promiseRef)
-            .then((values)=>baseController.sendResponseData(cmsTypes.results.OK, {'total':response.coSpaces.attrkey.total, 'coSpaces':values} , res));
+        if(typeof response.coSpaces != 'undefined' && response.coSpaces != null){
+            if(typeof response.coSpaces.length != 'undefined' && response.coSpaces.length != null){
+                let promiseRef = [];
+                response.coSpaces.coSpace.forEach((coSpace)=>promiseRef.push(httpHelper.getRequest(cmsTypes.CmsApis.COSPACES + "/" + coSpace.attrkey.id)));
+                Promise.all(promiseRef)
+                .then((values)=>baseController.sendResponseData(cmsTypes.results.OK, {'total':response.coSpaces.attrkey.total, 'coSpaces':values} , res));
+            }
+            else
+                return baseController.sendResponseData(cmsTypes.results.OK, {'total': response.coSpaces.attrkey.total, 'coSpaces':[response.coSpaces.coSpace]} , res);
         }
+        else
+        return baseController.sendResponseData(cmsTypes.results.OK, {'total': 0, 'coSpaces':[]} , res);
     })
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 };
@@ -99,13 +103,38 @@ module.exports.addUserInCospace = (req, res, next)=>{
 
 module.exports.getUsers = (req, res, next)=>{
     let finalReq = cmsTypes.CmsApis.USERS;
-    
-    if(typeof req.query.filter != 'undefined' || req.query.filter != null)
-    finalReq += '?filter='+req.query.filter;
-  
-    httpHelper.getRequest(finalReq)
-    .then((response)=>baseController.sendResponseData(cmsTypes.results.OK, response, res))
-    .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+   
+
+    if(req.query.userid != undefined && req.query.userid != null)
+    finalReq +='/'+ req.query.userid;
+    finalReq += "?limit="+req.query.limit+"&offset="+req.query.offset;
+
+if(typeof req.query.tenantFilter != 'undefined' && req.query.tenantFilter != null)
+    finalReq += "&tenantFilter=" + req.query.tenantFilter;
+finalReq = getRequestQuery(req, finalReq);
+
+if(typeof req.query.emailFilter != 'undefined' && req.query.emailFilter != null)
+    finalReq += "&emailFilter=" + req.query.emailFilter;
+finalReq = getRequestQuery(req, finalReq);
+   
+httpHelper.getRequest(finalReq)
+.then((response)=>{ 
+
+if(typeof response.users != 'undefined' && response.users != null){
+    if(typeof response.users.length != 'undefined' && response.users.length != null){
+        let promiseRef = [];
+        response.users.user.forEach((user)=>promiseRef.push(httpHelper.getRequest(cmsTypes.CmsApis.USERS + "/" + user.attrkey.id)));
+        Promise.all(promiseRef)
+        .then((values)=>baseController.sendResponseData(cmsTypes.results.OK, {'total':response.users.attrkey.total, 'users':values} , res));
+    }
+    else
+        return baseController.sendResponseData(cmsTypes.results.OK, {'total': response.users.attrkey.total, 'users':[response.users.user]} , res);
+}
+else
+return baseController.sendResponseData(cmsTypes.results.OK, {'total': 0, 'users':[]} , res);
+})
+
+.catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 };
 
 getRequestQuery = (req, query)=>{
