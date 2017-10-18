@@ -26,11 +26,13 @@ module.exports.getCospaces = (req, res, next)=>{
                 let promiseRef = [];
                 response.coSpaces.coSpace.forEach((coSpace)=>promiseRef.push(httpHelper.getRequest(cmsTypes.CmsApis.COSPACES + "/" + coSpace.attrkey.id)));
                 Promise.all(promiseRef)
-                .then((values)=>baseController.sendResponseData(cmsTypes.results.OK, {'total':response.coSpaces.attrkey.total, 'coSpaces':values} , res));
+                .then((values)=>baseController.sendResponseData(cmsTypes.results.OK, {'total':response.coSpaces.attrkey.total, 'coSpaces':values} , res))
+                .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
             }
             else{
                 httpHelper.getRequest(cmsTypes.CmsApis.COSPACES + "/" +  response.coSpaces.coSpace.attrkey.id)
-                .then((values)=>baseController.sendResponseData(cmsTypes.results.OK, {'total':response.coSpaces.attrkey.total, 'coSpaces':[values]} , res));
+                .then((values)=>baseController.sendResponseData(cmsTypes.results.OK, {'total':response.coSpaces.attrkey.total, 'coSpaces':[values]} , res))
+                .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
             }
         }
         else
@@ -124,11 +126,13 @@ if(typeof response.users.user != 'undefined' && response.users.user != null){
         let promiseRef = [];
         response.users.user.forEach((user)=>promiseRef.push(httpHelper.getRequest(cmsTypes.CmsApis.USERS + "/" + user.attrkey.id)));
         Promise.all(promiseRef)
-        .then((values)=>baseController.sendResponseData(cmsTypes.results.OK, {'total':response.users.attrkey.total, 'users':values} , res));
+        .then((values)=>baseController.sendResponseData(cmsTypes.results.OK, {'total':response.users.attrkey.total, 'users':values} , res))
+        .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
     }
     else{
         httpHelper.getRequest(cmsTypes.CmsApis.USERS + "/" +  response.users.user.attrkey.id)
-        .then((values)=>baseController.sendResponseData(cmsTypes.results.OK, {'total':response.users.attrkey.total, 'users':[values]} , res));
+        .then((values)=>baseController.sendResponseData(cmsTypes.results.OK, {'total':response.users.attrkey.total, 'users':[values]} , res))
+        .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
     }  
 }
 else

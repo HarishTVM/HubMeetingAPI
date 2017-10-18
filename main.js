@@ -2,8 +2,6 @@
 "esversion:6";
 "strict mode";
 
-process.env.UV_THREADPOOL_SIZE = 128;
-
 const config = require('./web-config');
 const restify = require('restify');
 const restifyPlugins = require('restify-plugins');
@@ -41,9 +39,6 @@ const cors = corsMiddleware({
 
     var swaggerSpec = swaggerJSDoc(options);
 
-
-process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-
 if (cluster.isMaster){
   // Count the machine's CPUs
   const CPUcount = require('os').cpus().length;     
@@ -51,6 +46,10 @@ if (cluster.isMaster){
         cluster.fork();  
 }
 else{		
+    
+    process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+    process.env.UV_THREADPOOL_SIZE = 10000;
+
     // Server Creation
     const server = restify.createServer({
         name: config.app.name,

@@ -21,7 +21,7 @@ module.exports.getRequest = (url)=>{
     let options = { 
         method: 'GET',
         uri: config.cmsAuth.apiUrl + url,
-        timeout: 3000,
+        timeout: 10000,
         headers:{'Authorization': getAuth() ,'content-type': 'text/plain'},
     };
 
@@ -33,7 +33,7 @@ module.exports.postRequest = (url, parameter)=>{
     let options = { 
         method: 'POST',
         uri: config.cmsAuth.apiUrl + url,
-        timeout: 3000,
+        timeout: 10000,
         headers: {'Authorization': getAuth(),'content-type': 'text/plain'},
         multipart:[{body: parameter}]
     };
@@ -45,7 +45,7 @@ module.exports.putRequest = (url, parameter)=>{
     let options = { 
         method: 'PUT',
         uri: config.cmsAuth.apiUrl + url,
-        timeout: 3000,
+        timeout: 10000,
         headers: {'Authorization': getAuth(),'content-type': 'text/plain'}
     };
 
@@ -60,7 +60,7 @@ module.exports.deleteRequest = (url, parameter)=>{
     let options = { 
         method: 'DELETE',
         uri:  config.cmsAuth.apiUrl + url,
-        timeout: 3000,
+        timeout: 10000,
         headers: {'Authorization': getAuth(),'content-type': 'text/plain'}
     };
 
