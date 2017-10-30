@@ -42,8 +42,7 @@ module.exports.getCospaces = (req, res, next)=>{
 };
 
 module.exports.getCospacesbyId = (req, res, next)=>{
-    var finalReq = cmsTypes.CmsApis.COSPACES;
-    
+    var finalReq = cmsTypes.CmsApis.COSPACES;    
     if(req.query.coSpaceid != undefined && req.query.coSpaceid != null)
     finalReq +='/'+ req.query.coSpaceid;
     finalReq += "?limit="+req.query.limit+"&offset="+req.query.offset;
@@ -51,7 +50,7 @@ module.exports.getCospacesbyId = (req, res, next)=>{
     httpHelper.getRequest(finalReq)
     .then((response)=>baseController.sendResponseData(cmsTypes.results.OK, response, res))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
-
+    return res;
 };
 
 module.exports.createCospace = (req, res, next)=>{

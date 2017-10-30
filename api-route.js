@@ -6,6 +6,7 @@ const errors = require('restify-errors');
 const cmsApiController = require('./controllers/cms-api-controller');
 const userController = require('./controllers/user-controller');
 const configurationController = require('./controllers/configuration-controller'); 
+const meetingController= require('./controllers/meeting-controller'); 
 const server = require('./main').server;
 
 server.get('/api/getCospaces', cmsApiController.getCospaces);
@@ -19,7 +20,12 @@ server.post('/api/addUserInCospace', cmsApiController.addUserInCospace);
 server.get('/api/getUsers', cmsApiController.getUsers);
 
 
+
+
 // LoginUser Related API
 server.post('/api/authenticateUser', userController.authenticateUser);
 server.put('/api/changeUserLoginPassword', userController.changeUserLoginPassword);
 server.post('/api/checkCmsApiUrl', configurationController.checkCmsApiUrl);
+
+//Meeting Related API
+server.post('/api/createMeeting', meetingController.createMeeting);
