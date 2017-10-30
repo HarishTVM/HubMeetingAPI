@@ -4,11 +4,17 @@
 
 const sequelize = require('sequelize');
 const cmsModel =  require('./cms-models');
+const cmsTypes = require('../cms-types');
 
 
 const meeting = {
     meetingID : {type: sequelize.INTEGER, allowNull: false, autoIncrement: true, primaryKey: true},
     coSpaceId : {type: sequelize.STRING, allowNull: false},
+    coSpace :{type:sequelize.STRING, allowNull:false},
+    description: {type: sequelize.STRING, allowNull:true},
+    meetingStatus: {type: sequelize.INTEGER, allowNull: false, defaultValue:cmsTypes.meetingStatus.TO_BE_STARTED},
+    uri:{type: sequelize.STRING, allowNull: false},
+    defaultLayout: {type: sequelize.INTEGER, allowNull:false, defaultLayout:cmsTypes.meetingLayout.ALL_EQUAL},
     isInitiated : {type: sequelize.BOOLEAN, allowNull: false},
     passcode : {type: sequelize.STRING, allowNull: false},
     meetingType : {type: sequelize.INTEGER, allowNull: false},

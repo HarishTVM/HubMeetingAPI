@@ -6,17 +6,32 @@ const errors = require('restify-errors');
 const cmsTypes = require('../cms-types');
 const model = require('../models/cms-models');
 const config = require('../web-config');
+const jsonHelper = require('../helpers/json-helper');
 
+const Meeting = model.meeting;
 
 /******---------------------------------------------- BEGIN OF ADAPTER METHODS --------------------------------------------------------------------------------------***/
 
-
 createMeeting = (data) =>{
     return new Promise((resolve, reject) => resolve())
-    .then(()=>{
-        meeting.insertOrUpdate({
-        meetingID: meeting.meetingId, coSpaceId: meeting.cospaceId, isInitiated: meeting.isInitiated, passcode: meeting.passcode, meetingType: meeting.type, meetingStartDateTime: meeting.startDateTime,meetingEndDateTime:meeting.endDateTime,isMeetingCreated:meeting.isCreated,isArchived:meeting.isArchived,archivedDate:meeting.archivedDate,meetingActualStartDateTime:meeting.actualStartDateTime,meetingActualEndDateTime:meeting.actualEndDateTime
-        })})
+    .then(()=>jsonHelper.getMeetingObject(data))
+    .then((meetingObj)=>
+         Meeting
+         .build(meetingObj)
+        .save({raw: true}))
+    .then((result)=>result.get({plain: true}))
+};
+
+updateMeeting = (data)=>{
+    return new Promise((resolve, reject) => resolve())
+    .then(()=>jsonHelper.getMeetingObject(data))
+    .then((meetingObj)=>{
+        Meeting
+        .update(
+            meetingObj,
+            {where: {coSpaceId: meetingObj.coSpaceId}}
+        )
+    });
 };
 
 /******---------------------------------------------- END OF ADAPTER METHODS ----------------------------------------------------------------------------------------***/
@@ -27,3 +42,4 @@ createMeeting = (data) =>{
 /******---------------------------------------------- END OF INNER METHODS ------------------------------------------------------------------------------------------***/
 
 module.exports.createMeeting = createMeeting;
+module.exports.updateMeeting = updateMeeting;

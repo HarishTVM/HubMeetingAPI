@@ -25,6 +25,45 @@ module.exports.userLevel = {
     ADMINISTRATOR:0
 };
 
+module.exports.meetingStatus = {
+    TO_BE_STARTED:0,
+    ON_GOING:1,
+    COMPLETED:2,
+    EXPIRED:3
+}
+
+module.exports.meetingLayoutTranslation = {
+    0:"allEqual",
+    1:"speakerOnly",
+    2:"telepresence",
+    3:"stacked",
+    4:"allEqualQuarters",
+    5:"allEqualNinths",
+    6:"allEqualSixteenths",
+    7:"allEqualTwentyFifths",
+    8:"onePlusFive",
+    9:"onePlusSeven",
+    10:"onePlusNine",
+    11:"automatic",
+    12:"onePlusN"
+}
+
+module.exports.meetingLayout = {
+    ALL_EQUAL:0,
+    SPEAKER_ONLY:1,
+    TELEPRESENCE:2,
+    STACKED:3,
+    ALL_EQUAL_QUARTERS:4,
+    ALL_EQUAL_NINTHS:5,
+    ALL_EQUAL_SIXTEENTHS:6,
+    ALL_EQUAL_TWENTY_FIFTHS:7,
+    ONE_PLUS_FIVE:8,
+    ONE_PLUS_SEVEN:9,
+    ONE_PLUS_NINE:10,
+    AUTOMATIC:11,
+    ONE_PLUS_N:12
+}
+
 module.exports.CmsApis = {
     COSPACES :"coSpaces",
     USERS :"users",
