@@ -11,6 +11,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "moment-timezone": "^0.5.14",
     "mysql": "^2.14.1",
     "mysql2": "^1.4.2",
     "request": "^2.83.0",

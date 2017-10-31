@@ -29,13 +29,28 @@ module.exports.getRequest = (url)=>{
     .then(()=>getResponse(options))
 };
 
-module.exports.postRequest = (url, parameter)=>{
+module.exports.postRequestWithHeaders = (url, parameter)=>{
+    console.log(parameter);
     let options = { 
         method: 'POST',
         uri: config.cmsAuth.apiUrl + url,
         timeout: 10000,
         headers: {'Authorization': getAuth(),'content-type': 'text/plain'},
-        multipart:[{body: parameter}]
+        body: parameter.toString()
+    };
+    return new Promise((resolve, reject)=> resolve())
+    .then(()=>getHeaderResponse(options))
+};
+
+module.exports.postRequest = (url, parameter)=>{
+    console.log(parameter);
+    let options = { 
+        method: 'POST',
+        uri: config.cmsAuth.apiUrl + url,
+        timeout: 10000,
+        headers: {'Authorization': getAuth(),'content-type': 'text/plain'},
+        body: parameter.toString()
+       // multipart:[{body: parameter}]
     };
     return new Promise((resolve, reject)=> resolve())
     .then(()=>getResponse(options))
@@ -50,7 +65,8 @@ module.exports.putRequest = (url, parameter)=>{
     };
 
     if(typeof parameter != 'undefined' && parameter != null)
-        options.multipart = [{body: parameter}]
+        options.body = parameter;
+       // options.multipart = [{body: parameter}]
 
     return new Promise((resolve, reject)=> resolve())
     .then(()=>getResponse(options))
@@ -76,16 +92,39 @@ var getResponse = (options)=>{
         request(options, (error, response, body) => {
             if(error)reject(new Error(error));
             else{
+                console.log(response.headers);
                 if(response.statusCode >= 200 && response.statusCode < 400){
                     if(typeof body != 'undefined' && body != null){
                         parseString(body, (err, jsonData)=>{
                             if(err)reject(new Error(err));
-                            resolve(jsonData);
+                            resolve(jsonData, response);
                         });
                     }
                     else
                         resolve(body);               
                 } 
+                else {
+                    if(response.statusCode == 401)
+                        reject(new errors.UnauthorizedError({message: "Unauthorized to access API", context: {errorType:cmsTypes.results.CUSTOM_ERROR, customErrCode: cmsTypes.status.USERNAME_OR_PASSWORD_INCORRECT}}));
+                    if(response.statusCode == 400)
+                        reject(new errors.BadRequestError({message: body.toString(), context: {errorType:cmsTypes.results.CUSTOM_ERROR, customErrCode: cmsTypes.status.BAD_REQUEST}}));
+                    parseString(body, (err, jsonData)=>{
+                        if(err)reject(new Error(err))
+                        reject(new Error(jsonData));
+                    });
+                }  
+            }    
+        });
+    });   
+};
+
+var getHeaderResponse = (options)=>{
+    return new Promise((resolve, reject)=>{
+        request(options, (error, response, body) => {
+            if(error)reject(new Error(error));
+            else{
+                if(response.statusCode >= 200 && response.statusCode < 400)
+                        resolve({"response":response, "data":body});              
                 else {
                     if(response.statusCode == 401)
                         reject(new errors.UnauthorizedError({message: "Unauthorized to access API", context: {errorType:cmsTypes.results.CUSTOM_ERROR, customErrCode: cmsTypes.status.USERNAME_OR_PASSWORD_INCORRECT}}));

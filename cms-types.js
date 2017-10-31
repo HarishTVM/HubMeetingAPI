@@ -2,6 +2,9 @@
 "esversion:6";
 "strict mode";
 
+module.exports.meetingCreationTime = 15;
+module.exports.meetingEndTime = 15;
+
 module.exports.results = {
     OK: "OK",
     KNOWN_ERROR: "KNOWN_ERROR",
@@ -30,6 +33,11 @@ module.exports.meetingStatus = {
     ON_GOING:1,
     COMPLETED:2,
     EXPIRED:3
+}
+
+module.exports.meetingType = {
+    PERSONAL:0,
+    ONE_TIME:1
 }
 
 module.exports.meetingLayoutTranslation = {

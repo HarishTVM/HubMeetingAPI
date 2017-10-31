@@ -29,7 +29,7 @@ updateMeeting = (data)=>{
         Meeting
         .update(
             meetingObj,
-            {where: {coSpaceId: meetingObj.coSpaceId}}
+            {where: {meetingID: meetingObj.meetingID}}
         )
     });
 };

@@ -6,6 +6,7 @@ const errors = require('restify-errors');
 const baseController = require('./base-controller');
 const httpHelper = require('../helpers/http-helper');
 const cmsTypes = require('../cms-types');
+const jsonHelper = require('../helpers/json-helper');
 
 module.exports.getCospaces = (req, res, next)=>{
     var finalReq = cmsTypes.CmsApis.COSPACES;
@@ -55,13 +56,13 @@ module.exports.getCospacesbyId = (req, res, next)=>{
 
 module.exports.createCospace = (req, res, next)=>{
     let cospace = req.body;
-    httpHelper.postRequest(cmsTypes.CmsApis.COSPACES,"name="+cospace.name+"&uri="+cospace.uri+"&passcode="+cospace.passcode+"&defaultLayout="+cospace.defaultLayout+"&cdrTag="+cospace.cdrTag)
+    jsonHelper.getcoSpaceObject(cospace)
+    .then((data)=>httpHelper.postRequest(cmsTypes.CmsApis.COSPACES, data))
     .then((response)=>baseController.sendResponseData(cmsTypes.results.OK, response, res))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 };
 
 module.exports.getCoSpacesUsers = (req, res, next)=>{
-
     var finalReq = cmsTypes.CmsApis.COSPACES+"/"+req.query.cospaceid+"/"+cmsTypes.CmsApis.COSPACEUSERS + "?limit="+req.query.limit+"&offset="+req.query.offset;
     finalReq = getRequestQuery(req, finalReq);
     httpHelper.getRequest(finalReq)
