@@ -111,6 +111,30 @@ module.exports.getMeetingMemberObject = (data)=>{
 }
 
 module.exports.getMeetingMemberString = (data)=>{
-    let meetingMember = "userId="+data.coSpaceUserID+"&userJid="+data.userJid;
-    
+    return new Promise((resolve, reject) => {
+    let meetingMember = "userId="+data.coSpaceUserID+"&userJid="+data.userJid+"&coSpaceId="+data.coSpaceId;
+
+    if(typeof data.callLegProfile != 'undefined' && data.callLegProfile != null)
+    meetingMember.callLegProfile = data.callLegProfile;
+    if(typeof data.canDestroy != 'undefined' && data.canDestroy != null)
+    meetingMember.canDestroy = data.canDestroy;
+    if(typeof data.canAddRemoveMember != 'undefined' && data.canAddRemoveMember != null)
+    meetingMember.canAddRemoveMember = data.canAddRemoveMember;
+    if(typeof data.canChangeName != 'undefined' && data.canChangeName != null)
+    meetingMember.canChangeName = data.canChangeName;
+    if(typeof data.canChangeUri != 'undefined' && data.canChangeUri != null)
+    meetingMember.canChangeUri = data.canChangeUri;
+    if(typeof data.canChangeCallId != 'undefined' && data.canChangeCallId != null)
+    meetingMember.canChangeCallId = data.canChangeCallId;
+    if(typeof data.canChangePasscode != 'undefined' && data.canChangePasscode != null)
+    meetingMember.canChangePasscode = data.canChangePasscode;
+    if(typeof data.canPostMessage != 'undefined' && data.canPostMessage != null)
+    meetingMember.canPostMessage = data.canPostMessage;
+    if(typeof data.canRemoveSelf != 'undefined' && data.canRemoveSelf != null)
+    meetingMember.canRemoveSelf = data.canRemoveSelf;
+    if(typeof data.canDeleteAllMessages != 'undefined' && data.canDeleteAllMessages != null)
+    meetingMember.canDeleteAllMessages = data.canDeleteAllMessages;
+   
+    resolve(meetingMember);
+})
 }

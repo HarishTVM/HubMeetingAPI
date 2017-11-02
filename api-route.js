@@ -18,8 +18,8 @@ server.put('/api/updateCospace', cmsApiController.updateCospace);
 server.del('/api/deleteCospaceUser', cmsApiController.deleteCospaceUser);
 server.post('/api/addUserInCospace', cmsApiController.addUserInCospace);
 server.get('/api/getUsers', cmsApiController.getUsers);
-
-
+server.get('/api/checkCoSpaceExistence', cmsApiController.checkCoSpaceExistence);
+server.post('/api/addCospaceMember', cmsApiController.addCospaceMember);
 
 
 // LoginUser Related API
@@ -29,3 +29,4 @@ server.post('/api/checkCmsApiUrl', configurationController.checkCmsApiUrl);
 
 //Meeting Related API
 server.post('/api/createMeeting', meetingController.createMeeting);
+
