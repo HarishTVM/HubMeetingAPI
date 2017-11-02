@@ -4,6 +4,7 @@
 
 module.exports.meetingCreationTime = 15;
 module.exports.meetingEndTime = 15;
+module.exports.dateTimeZone = "Europe/London";
 
 module.exports.results = {
     OK: "OK",

@@ -5,11 +5,24 @@
 const sequelize = require('sequelize');
 const dbConnection = require('../helpers/db-helper').dbConnection;
 
-module.exports.apiConfiguration = dbConnection.define("MHApiConfiguration", require("./startup-config-schema").apiConfiguration);
-module.exports.smtpConfiguration = dbConnection.define("MHApiConfiguration", require("./startup-config-schema").smtpConfiguration);
-module.exports.userLevel = dbConnection.define("MHUserLevel", require("./user-level-schema").userLevelObj);
-module.exports.userLogin = dbConnection.define("MHUserLogin", require("./user-login-schema").userLogin);
-module.exports.userDetails = dbConnection.define("MHUserDetails", require("./user-login-schema").userDetails);
-module.exports.meeting = dbConnection.define("MHMeeting", require("./meeting-schema").meeting);
-module.exports.meetingMember = dbConnection.define("MHMeetingMember", require("./meeting-schema").meetingMember);
-module.exports.log = dbConnection.define("MHLog", require("./logs-schema").logs);
+const apiConfiguration = dbConnection.define("MHApiConfiguration", require("./startup-config-schema").apiConfiguration);
+const smtpConfiguration = dbConnection.define("MHApiConfiguration", require("./startup-config-schema").smtpConfiguration);
+const userLevel = dbConnection.define("MHUserLevel", require("./user-level-schema").userLevelObj);
+const userLogin = dbConnection.define("MHUserLogin", require("./user-login-schema").userLogin);
+const userDetails = dbConnection.define("MHUserDetails", require("./user-login-schema").userDetails);
+const meeting = dbConnection.define("MHMeeting", require("./meeting-schema").meeting);
+const meetingMember = dbConnection.define("MHMeetingMember", require("./meeting-schema").meetingMember);
+const log = dbConnection.define("MHLog", require("./logs-schema").logs);
+
+meeting.hasMany(meetingMember);
+
+
+
+module.exports.apiConfiguration = apiConfiguration;
+module.exports.smtpConfiguration = smtpConfiguration;
+module.exports.userLevel = userLevel;
+module.exports.userLogin = userLogin;
+module.exports.userDetails = userDetails;
+module.exports.meeting = meeting;
+module.exports.meetingMember = meetingMember;
+module.exports.log = log;

@@ -30,7 +30,8 @@ const meeting = {
 const meetingMember = {
     meetingMemberID : {type: sequelize.INTEGER, allowNull: false, autoIncrement: true, primaryKey: true},
     meetingStartDateTime : {type: sequelize.DATE, allowNull: true},
-    meetingActualEndDateTime: {type: sequelize.DATE, allowNull: true},
+    meetingEndDateTime: {type: sequelize.DATE, allowNull: true},
+    memberJid:{type: sequelize.STRING, allowNull: true},
     isOwner : {type: sequelize.BOOLEAN, allowNull: false},
     isMailed : {type: sequelize.BOOLEAN, allowNull: false},
     isAttended : {type: sequelize.BOOLEAN, allowNull: false, defaultValue: false},

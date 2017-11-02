@@ -9,6 +9,7 @@ const config = require('../web-config');
 const jsonHelper = require('../helpers/json-helper');
 
 const Meeting = model.meeting;
+const MeetingMembers = model.meetingMember;
 
 /******---------------------------------------------- BEGIN OF ADAPTER METHODS --------------------------------------------------------------------------------------***/
 
@@ -34,6 +35,20 @@ updateMeeting = (data)=>{
     });
 };
 
+addMeetingMembers = (data)=>{
+    return new Promise((resolve, reject) => resolve())
+    .then(()=>{
+        let meetingMembers = [];
+
+        data.members.forEach((member)=>{
+            member.meetingID = data.meetingObj.meetingID;
+            meetingMembers.push(jsonHelper.getMeetingMemberObject(member));
+        });
+
+       return MeetingMembers.bulkCreate(meetingMembers)
+    });
+}
+
 /******---------------------------------------------- END OF ADAPTER METHODS ----------------------------------------------------------------------------------------***/
 /******---------------------------------------------- BEGIN OF INNER METHODS ----------------------------------------------------------------------------------------***/
 // BEGIN General Methods
@@ -43,3 +58,4 @@ updateMeeting = (data)=>{
 
 module.exports.createMeeting = createMeeting;
 module.exports.updateMeeting = updateMeeting;
+module.exports.addMeetingMembers = addMeetingMembers;

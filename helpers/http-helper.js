@@ -30,7 +30,6 @@ module.exports.getRequest = (url)=>{
 };
 
 module.exports.postRequestWithHeaders = (url, parameter)=>{
-    console.log(parameter);
     let options = { 
         method: 'POST',
         uri: config.cmsAuth.apiUrl + url,
@@ -43,7 +42,6 @@ module.exports.postRequestWithHeaders = (url, parameter)=>{
 };
 
 module.exports.postRequest = (url, parameter)=>{
-    console.log(parameter);
     let options = { 
         method: 'POST',
         uri: config.cmsAuth.apiUrl + url,
@@ -92,7 +90,6 @@ var getResponse = (options)=>{
         request(options, (error, response, body) => {
             if(error)reject(new Error(error));
             else{
-                console.log(response.headers);
                 if(response.statusCode >= 200 && response.statusCode < 400){
                     if(typeof body != 'undefined' && body != null){
                         parseString(body, (err, jsonData)=>{

@@ -46,6 +46,7 @@ module.exports.getcoSpaceObject = (data)=>{
     })
 }
 
+
 module.exports.getMeetingObject = (data)=>{
     return new Promise((resolve, reject) => {
         let meetingObj = {
@@ -54,8 +55,8 @@ module.exports.getMeetingObject = (data)=>{
             isInitiated: data.isInitiated,
             passcode: data.passcode,
             meetingType: data.meetingType,
-            meetingStartDateTime: moment.tz(data.meetingStartDateTime, moment.tz.guess()),
-            meetingEndDateTime: moment.tz(data.meetingEndDateTime, moment.tz.guess())
+            meetingStartDateTime: moment.tz(data.meetingStartDateTime, cmsType.dateTimeZone),
+            meetingEndDateTime: moment.tz(data.meetingEndDateTime, cmsType.dateTimeZone)
         }
 
         if(typeof data.meetingID != 'undefined' && data.meetingID != null)
@@ -73,12 +74,43 @@ module.exports.getMeetingObject = (data)=>{
         if(typeof data.isArchived != 'undefined' && data.isArchived != null)
             meetingObj.isArchived = data.isArchived;
         if(typeof data.archivedDate != 'undefined' && data.archivedDate != null)
-            meetingObj.archivedDate = moment.tz(data.archivedDate, moment.tz.guess());
+            meetingObj.archivedDate = moment.tz(data.archivedDate, cmsType.dateTimeZone);
         if(typeof data.meetingActualStartDateTime != 'undefined' && data.meetingActualStartDateTime != null)
-            meetingObj.meetingActualStartDateTime = moment.tz(data.meetingActualStartDateTime, moment.tz.guess());
+            meetingObj.meetingActualStartDateTime = moment.tz(data.meetingActualStartDateTime, cmsType.dateTimeZone);
         if(typeof data.meetingActualEndDateTime != 'undefined' && data.meetingActualEndDateTime != null)
-            meetingObj.meetingActualEndDateTime = moment.tz(data.meetingActualEndDateTime, moment.tz.guess());
-        
+            meetingObj.meetingActualEndDateTime = moment.tz(data.meetingActualEndDateTime, cmsType.dateTimeZone);
+        if(typeof data.ownerJid != 'undefined' && data.ownerJid != null)
+            meetingObj.ownerJid = data.ownerJid;
+
         resolve(meetingObj);
     })
+}
+
+module.exports.getMeetingMemberObject = (data)=>{
+    let meetingMemberObj = {
+        memberJid: data.memberJid,
+        coSpaceUserID: data.coSpaceUserID,
+        isOwner: data.isOwner,
+        meetingID: data.meetingID
+    }
+    
+    if(typeof data.meetingMemberID != 'undefined' && data.meetingMemberID != null)
+        meetingMemberObj.meetingMemberID = data.meetingMemberID;
+    if(typeof data.meetingStartDateTime != 'undefined' && data.meetingStartDateTime != null)
+        meetingMemberObj.meetingStartDateTime = moment.tz(data.meetingStartDateTime, cmsType.dateTimeZone);
+    if(typeof data.meetingEndDateTime != 'undefined' && data.meetingEndDateTime != null)
+        meetingMemberObj.meetingEndDateTime = moment.tz(data.meetingEndDateTime, cmsType.dateTimeZone);
+    if(typeof data.isMailed != 'undefined' && data.isMailed != null)
+        meetingMemberObj.isMailed = data.isMailed;
+    if(typeof data.isAttended != 'undefined' && data.isAttended != null)
+        meetingMemberObj.isAttended = data.isAttended;
+    if(typeof data.coSpaceUserID != 'undefined' && data.coSpaceUserID != null)
+        meetingMemberObj.coSpaceUserID = data.coSpaceUserID;
+    
+    return meetingMemberObj;
+}
+
+module.exports.getMeetingMemberString = (data)=>{
+    let meetingMember = "userId="+data.coSpaceUserID+"&userJid="+data.userJid;
+    
 }
