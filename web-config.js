@@ -16,6 +16,7 @@ module.exports.envType = env;
 module.exports.database = {
 	url: 'mysql://root:Pass1234@localhost/sample',
 	options: {
+		timezone:'Europe/London',
 		define: {
 			freezeTableName: true,
 			paranoid: true
