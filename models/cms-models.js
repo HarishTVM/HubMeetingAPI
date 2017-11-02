@@ -16,8 +16,6 @@ const log = dbConnection.define("MHLog", require("./logs-schema").logs);
 
 meeting.hasMany(meetingMember);
 
-
-
 module.exports.apiConfiguration = apiConfiguration;
 module.exports.smtpConfiguration = smtpConfiguration;
 module.exports.userLevel = userLevel;
