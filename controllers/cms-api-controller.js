@@ -149,3 +149,27 @@ getRequestQuery = (req, query)=>{
         query += '&filter=' + req.query.filter;
     return query;
 }
+
+module.exports.checkCoSpaceExistence = (req, res, next)=>{
+    var finalReq = cmsTypes.CmsApis.COSPACES;    
+    if(typeof req.query.filter != 'undefined' && req.query.filter != null)
+    finalReq +='?filter='+ req.query.filter;
+    console.log(finalReq)
+    httpHelper.getRequest(finalReq)
+    .then((response)=>baseController.sendResponseData(cmsTypes.results.OK,response, res))
+    // .then((response)=>baseController.sendResponseData(cmsTypes.results.OK,response.coSpaces.attrkey.total, res))  //gives total no of uris
+    .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+    return res;
+};
+
+module.exports.addCospaceMember = (req, res, next)=>{
+    var finalReq = cmsTypes.CmsApis.COSPACES;
+    var meetingMember = req.body; 
+    finalReq +='/'+ meetingMember.coSpaceId+'/'+cmsTypes.CmsApis.COSPACEUSERS;
+    console.log(finalReq)
+    jsonHelper.getMeetingMemberString(meetingMember)
+    .then((data)=>httpHelper.postRequest(finalReq, data))
+    .then((response)=>baseController.sendResponseData(cmsTypes.results.OK,response, res))
+    .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+    return res;
+};
