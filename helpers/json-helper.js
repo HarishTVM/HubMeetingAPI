@@ -111,7 +111,7 @@ module.exports.getMeetingMemberObject = (data)=>{
 }
 
 module.exports.getMeetingMemberString = (data)=>{
-    let meetingMember = "userId="+data.coSpaceUserID+"&userJid="+data.userJid+"&coSpaceId="+data.coSpaceId;
+    let meetingMember = "userId="+data.coSpaceUserID+"&userJid="+data.memberJid+"&coSpaceId="+data.coSpaceId;
 
     if(typeof data.callLegProfile != 'undefined' && data.callLegProfile != null)
     meetingMember.callLegProfile = data.callLegProfile;

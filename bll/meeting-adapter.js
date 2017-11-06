@@ -7,6 +7,8 @@ const cmsTypes = require('../cms-types');
 const model = require('../models/cms-models');
 const config = require('../web-config');
 const jsonHelper = require('../helpers/json-helper');
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 const Meeting = model.meeting;
 const MeetingMembers = model.meetingMember;
@@ -47,6 +49,59 @@ addMeetingMembers = (data)=>{
 
        return MeetingMembers.bulkCreate(meetingMembers)
     });
+};
+
+deleteMeeting = (meetingID)=>{
+    return new Promise((resolve, reject) => resolve())
+    .then(()=>Meeting.destroy({
+        where:{
+            meetingID:meetingID
+        },
+        truncate:true
+    }));
+};
+
+deleteAllMembersOfMeeting = (meetingID)=>{
+    return new Promise((resolve, reject) => resolve())
+    .then(()=>MeetingMembers.destroy({
+        where:{
+            meetingID:meetingID
+        },
+        truncate:true
+    }));
+};
+
+deleteMembersOfMeeting = (data)=>{
+    return new Promise((resolve, reject) => resolve())
+    .then(()=>{
+        let destroyObj = {}
+
+        if(typeof data.memberJid != 'undefined' && data.memberJid != null)
+            destroyObj = {memberJid: data.memberJid};
+        if(typeof data.coSpaceUserID != 'undefined' && data.coSpaceUserID != null)
+            destroyObj = {coSpaceUserID: data.coSpaceUserID};
+
+        return MeetingMembers.destroy({
+            where: destroyObj,
+            truncate: true
+        });
+    });
+};
+
+findOneMeeting = (data)=>{
+    return new Promise((resolve, reject) => resolve())
+    .then(()=>Meeting.findAll({
+        where:{
+            meetingID: data.meetingID
+        },
+        raw: true,
+        include: [{
+            model:MeetingMembers,
+            through:{
+                attributes:['meetingID']
+            }
+        }]
+    }))
 }
 
 /******---------------------------------------------- END OF ADAPTER METHODS ----------------------------------------------------------------------------------------***/
@@ -59,3 +114,7 @@ addMeetingMembers = (data)=>{
 module.exports.createMeeting = createMeeting;
 module.exports.updateMeeting = updateMeeting;
 module.exports.addMeetingMembers = addMeetingMembers;
+module.exports.deleteMeeting = deleteMeeting;
+module.exports.deleteAllMembersOfMeeting = deleteAllMembersOfMeeting;
+module.exports.deleteMembersOfMeeting = deleteMembersOfMeeting;
+module.exports.findOneMeeting = findOneMeeting;
