@@ -79,7 +79,8 @@ module.exports.deleteRequest = (url, parameter)=>{
     };
 
     if(typeof parameter != 'undefined' && parameter != null)
-        options.multipart = [{body: parameter}]
+        options.body = parameter;
+        //options.multipart = [{body: parameter}]
 
     return new Promise((resolve, reject)=> resolve())
     .then(()=>getResponse(options))

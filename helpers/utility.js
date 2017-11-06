@@ -20,7 +20,9 @@ exports.isMeetingHasToScheduleNow = function(meetingStartDate){
   diffDate.setMinutes(diffDate.getMinutes() + cmsTypes.meetingCreationTime);
   var scheduledTime = new Date(moment.tz(meetingStartDate, cmsTypes.dateTimeZone));
   var diff = (scheduledTime.getTime() - diffDate.getTime());
+  console.log(diff);
   var res = Math.floor(diff / 60000);
+  console.log(res);
   if(res > (cmsTypes.meetingCreationTime*-1) && res <= cmsTypes.meetingCreationTime)
     return true;
   else

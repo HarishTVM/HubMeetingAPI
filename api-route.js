@@ -30,4 +30,4 @@ server.post('/api/checkCmsApiUrl', configurationController.checkCmsApiUrl);
 
 //Meeting Related API
 server.post('/api/createMeeting', meetingController.createMeeting);
-
+server.del('/api/deleteMeeting', meetingController.deleteMeeting);

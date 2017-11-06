@@ -21,6 +21,9 @@ module.exports.status = {
     UNKNOWN_USER: 1,
     PASSWORD_INCORRECT: 2,
 
+    /** Meeting Related Status **/
+    MEETING_NOT_EXISTS: 51,
+
     /** CMS API Related Status **/
     USERNAME_OR_PASSWORD_INCORRECT:100
 };
