@@ -137,4 +137,7 @@ module.exports.getMeetingMemberString = (data)=>{
    
     resolve(meetingMember);
 })
-}
+}   
+
+
+

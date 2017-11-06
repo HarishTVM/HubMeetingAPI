@@ -173,3 +173,15 @@ module.exports.addCospaceMember = (req, res, next)=>{
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
     return res;
 };
+
+
+
+module.exports.getActiveCall = (req, res, next)=>{
+    var finalReq = cmsTypes.CmsApis.CALL_LEGS;
+    if(typeof req.query.callId != 'undefined' || req.query.callId != null)
+       finalReq = finalReq+"/"+req.query.callId;
+    httpHelper.getRequest(finalReq)
+    .then((response)=>baseController.sendResponseData(cmsTypes.results.OK,response, res))
+    .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+  
+};

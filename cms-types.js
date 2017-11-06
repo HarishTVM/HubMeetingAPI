@@ -77,5 +77,7 @@ module.exports.CmsApis = {
     COSPACES :"coSpaces",
     USERS :"users",
     COSPACEUSERS:"coSpaceUsers",
-    USERCOSPACES:"userCoSpaces"
+    USERCOSPACES:"userCoSpaces",
+    CALLS:"calls",
+    CALL_LEGS:"callLegs"
 }
