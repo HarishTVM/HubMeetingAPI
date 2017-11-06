@@ -20,16 +20,24 @@ module.exports.createMeeting = (req, res, next) => {
             meeting.isMeetingCreated = true;
 
             if(meeting.meetingType == cmsTypes.meetingType.ONE_TIME){ // One time meeting
-                jsonHelper.getcoSpaceObject(data)
+                return jsonHelper.getcoSpaceObject(data)
                 .then((coSpace)=>httpHelper.postRequestWithHeaders(cmsTypes.CmsApis.COSPACES, coSpace))
                 .then((res)=>{
                     meeting.coSpaceId = res.response.headers.location.substr(res.response.headers.location.lastIndexOf('/') + 1); 
                     meetingAdapter.updateMeeting(meeting)
                 })
+                .then(()=>{
+                    let meetingMembers = [];
+                    data.members.forEach((member)=>{
+                        member.meetingID = data.meetingObj.meetingID;
+                        meetingMembers.push(httpHelper.postRequest(cmsTypes.CmsApis.COSPACES+'/'+ meeting.coSpaceId+'/'+cmsTypes.CmsApis.COSPACEUSERS, jsonHelper.getMeetingMemberObject(member)));
+                    });
+                    return Promise.all(meetingMembers);
+                })
                 .then(()=>meetingAdapter.addMeetingMembers({"members":data.members, "meetingObj":meeting}))
             }
             else{   // personal meeting
-                jsonHelper.getcoSpaceObject(data)
+                return jsonHelper.getcoSpaceObject(data)
                 .then((cospace)=>httpHelper.putRequest(cmsTypes.CmsApis.COSPACES+"/"+meeting.coSpaceId, cospace))
             }
         }

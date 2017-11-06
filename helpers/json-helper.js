@@ -111,7 +111,6 @@ module.exports.getMeetingMemberObject = (data)=>{
 }
 
 module.exports.getMeetingMemberString = (data)=>{
-    return new Promise((resolve, reject) => {
     let meetingMember = "userId="+data.coSpaceUserID+"&userJid="+data.userJid+"&coSpaceId="+data.coSpaceId;
 
     if(typeof data.callLegProfile != 'undefined' && data.callLegProfile != null)
@@ -135,6 +134,5 @@ module.exports.getMeetingMemberString = (data)=>{
     if(typeof data.canDeleteAllMessages != 'undefined' && data.canDeleteAllMessages != null)
     meetingMember.canDeleteAllMessages = data.canDeleteAllMessages;
    
-    resolve(meetingMember);
-})
+    return meetingMember;
 }
