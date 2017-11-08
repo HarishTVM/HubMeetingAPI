@@ -47,7 +47,7 @@ module.exports.getCospacesbyId = (req, res, next)=>{
     if(req.query.coSpaceid != undefined && req.query.coSpaceid != null)
     finalReq +='/'+ req.query.coSpaceid;
     finalReq += "?limit="+req.query.limit+"&offset="+req.query.offset;
-  
+   
     httpHelper.getRequest(finalReq)
     .then((response)=>baseController.sendResponseData(cmsTypes.results.OK, response, res))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
@@ -66,7 +66,10 @@ module.exports.getCoSpacesUsers = (req, res, next)=>{
     var finalReq = cmsTypes.CmsApis.COSPACES+"/"+req.query.cospaceid+"/"+cmsTypes.CmsApis.COSPACEUSERS + "?limit="+req.query.limit+"&offset="+req.query.offset;
     finalReq = getRequestQuery(req, finalReq);
     httpHelper.getRequest(finalReq)
-    .then((response)=>baseController.sendResponseData(cmsTypes.results.OK, response, res))
+    .then((response)=>{
+        if(response.coSpaceUsers.attrkey.total == 1)
+            response.coSpaceUsers.coSpaceUser = [response.coSpaceUsers.coSpaceUser];
+        baseController.sendResponseData(cmsTypes.results.OK, response, res)})
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 
 };
