@@ -90,18 +90,66 @@ deleteMembersOfMeeting = (data)=>{
 
 findOneMeeting = (data)=>{
     return new Promise((resolve, reject) => resolve())
-    .then(()=>Meeting.findAll({
+    .then(()=>Meeting.findOne({
         where:{
             meetingID: data.meetingID
         },
-        raw: true,
-        include: [{
-            model:MeetingMembers,
-            through:{
-                attributes:['meetingID']
-            }
-        }]
-    }))
+        raw: true
+    }));
+};
+
+findAllMeeting = (data)=>{
+    var query = {
+        limit: parseInt(data.limit),
+        offset: parseInt(data.offset),
+        order:[['meetingStartDateTime', 'DESC']],
+        raw:true
+    }
+
+    if(typeof data.filter != 'undefined' && data.filter != null)
+        query.where = {$or: [
+                                { coSpace: { $like: data.filter + '%' } },
+                                { uri: { $like: data.filter + '%' } }
+                            ]};
+    return new Promise((resolve, reject) => resolve())
+    .then(()=>Meeting.findAndCount(query))
+};
+
+findMeetingMemberCount = (data)=>{
+    return MeetingMembers.findAndCount({
+        where:{
+            meetingID:data.meetingID
+        },
+        raw:true,    
+
+
+        
+        limit: 10,
+        offset: 0
+    })
+    .then((result)=>{return result.count});
+};
+
+findAllMeetingMembers = (data)=>{
+    var query = {
+        limit: parseInt(data.limit),
+        offset: parseInt(data.offset),
+        order:[['memberJid', 'ASC']],
+        raw:true
+    }
+
+    if(typeof data.filter != 'undefined' && data.filter != null){
+        query.where = {$and: [
+                                { meetingID: parseInt(data.meetingID) },
+                                { memberJid: { $like: data.filter + '%' } }
+                        ]};
+    }
+    else
+        query.where = { meetingID: parseInt(data.meetingID) };
+
+    return new Promise((resolve, reject) => resolve())
+    .then(()=>MeetingMembers.findAndCount(query))
+                            
 }
 
 /******---------------------------------------------- END OF ADAPTER METHODS ----------------------------------------------------------------------------------------***/
@@ -118,3 +166,6 @@ module.exports.deleteMeeting = deleteMeeting;
 module.exports.deleteAllMembersOfMeeting = deleteAllMembersOfMeeting;
 module.exports.deleteMembersOfMeeting = deleteMembersOfMeeting;
 module.exports.findOneMeeting = findOneMeeting;
+module.exports.findAllMeeting = findAllMeeting;
+module.exports.findMeetingMemberCount = findMeetingMemberCount;
+module.exports.findAllMeetingMembers = findAllMeetingMembers;

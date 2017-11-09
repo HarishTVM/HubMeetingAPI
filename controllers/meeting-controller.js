@@ -65,7 +65,6 @@ module.exports.deleteMeeting = (req, res, next)=>{
 
     meetingAdapter.findOneMeeting(data)
     .then((meetingObj)=>{
-        console.log(meetingObj);
         if(meetingObj == null)
             return Promise.reject(new errors.UnauthorizedError({message: "Meeting Object Not Found", context: {errorType:cmsTypes.results.CUSTOM_ERROR, customErrCode: cmsTypes.status.MEETING_NOT_EXISTS}}));
         
@@ -88,5 +87,31 @@ module.exports.updateMeeting = (req, res, next)=>{
 
     meetingAdapter.updateMeeting(data)
     .then((result)=>baseController.sendResponseData(cmsTypes.results.OK, '', res))
+    .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+}
+
+module.exports.findAllMeeting = (req, res, next)=>{
+    var _result;
+
+    meetingAdapter.findAllMeeting(req.query)
+    .then((result)=>{
+        _result = result;
+        let promiseRef = [];
+        
+        result.rows.forEach((row)=>promiseRef.push(meetingAdapter.findMeetingMemberCount(row)));
+        return Promise.all(promiseRef);
+    })
+    .then((memberCounts)=>{
+        for(var i=0; i<_result.rows.length; i++)
+            _result.rows[i].memberCount = memberCounts[i];
+
+        return baseController.sendResponseData(cmsTypes.results.OK, _result, res)
+    })
+    .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+}
+
+module.exports.findAllMeetingMembers = (req, res, next)=>{
+    meetingAdapter.findAllMeetingMembers(req.query)
+    .then((result)=>baseController.sendResponseData(cmsTypes.results.OK, result, res))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 }

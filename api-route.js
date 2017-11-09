@@ -31,3 +31,5 @@ server.post('/api/checkCmsApiUrl', configurationController.checkCmsApiUrl);
 //Meeting Related API
 server.post('/api/createMeeting', meetingController.createMeeting);
 server.del('/api/deleteMeeting', meetingController.deleteMeeting);
+server.get('/api/findAllMeeting', meetingController.findAllMeeting);
+server.get('/api/findAllMeetingMembers', meetingController.findAllMeetingMembers);

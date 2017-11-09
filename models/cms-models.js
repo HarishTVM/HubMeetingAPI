@@ -15,9 +15,9 @@ const meetingMember = dbConnection.define("MHMeetingMember", require("./meeting-
 const log = dbConnection.define("MHLog", require("./logs-schema").logs);
 
 meeting.hasMany(meetingMember, {foreignKey: 'meetingID'});
-meetingMember.hasOne(meeting, {foreignKey:'meetingID'});
+meetingMember.belongsTo(meeting, {foreignKey:'meetingID'});
 
-meeting.belongsToMany(meetingMember, {through: meetingMember, foreignKey:'meetingID'});
+//meeting.belongsToMany(meetingMember, {through: meetingMember, foreignKey:'meetingID'});
 
 module.exports.apiConfiguration = apiConfiguration;
 module.exports.smtpConfiguration = smtpConfiguration;
