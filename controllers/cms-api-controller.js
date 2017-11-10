@@ -183,9 +183,6 @@ module.exports.getActiveCall = (req, res, next)=>{
     httpHelper.getRequest(finalReq)
     .then((response)=>baseController.sendResponseData(cmsTypes.results.OK,response, res))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
-<<<<<<< HEAD
-=======
-  
 };
 
 
@@ -196,6 +193,4 @@ module.exports.deleteActiveCall = (req, res, next)=>{
     httpHelper.deleteRequest(finalReq)
     .then((response)=>baseController.sendResponseData(cmsTypes.results.OK,response, res))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
-  
->>>>>>> 8983292ba7128de5364b28165c7137e12d11ff23
 };

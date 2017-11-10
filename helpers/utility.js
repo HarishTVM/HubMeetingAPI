@@ -15,16 +15,14 @@ exports.hashString = function(password){
     return(crypted.toString());
 };
 
-exports.isMeetingHasToScheduleNow = function(meetingStartDate){
-  var diffDate =  new Date(moment.tz(new Date(), cmsTypes.dateTimeZone));
-  diffDate.setMinutes(diffDate.getMinutes() + cmsTypes.meetingCreationTime);
-  var scheduledTime = new Date(moment.tz(meetingStartDate, cmsTypes.dateTimeZone));
-  var diff = (scheduledTime.getTime() - diffDate.getTime());
-  console.log(diff);
-  var res = Math.floor(diff / 60000);
-  console.log(res);
-  if(res > (cmsTypes.meetingCreationTime*-1) && res <= cmsTypes.meetingCreationTime)
-    return true;
-  else
-    return false;
+exports.isMeetingHasToScheduleNow = function (meetingStartDate) {
+    var now = new Date(moment.tz(new Date().toISOString(), moment.tz.guess()).clone().tz(cmsTypes.dateTimeZone).format());
+
+    diff = meetingStartDate.getTime() - now.getTime();
+    min = Math.floor(diff / 60000);
+
+    if (min >= -15 && min <= 15)
+        return true;
+    else
+        return false;
 };

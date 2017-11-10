@@ -26,15 +26,16 @@ const cors = corsMiddleware({
 		info: {
             "version": "1.0.0",
             "title": "Meeting Hub (CMS)",
+            "description":""
         },
-        host: "localhost:9000",
-        basePath: "/api",
+        host: "192.168.5.20:9000",
+        basePath: "/api"
 	};
 	
 	var options = {
 		swaggerDefinition: swaggerDefinition,
 		// Path to the API docs
-		apis: ['./controllers/*.js'],
+		apis: ['./controllers/*.js', './models/*.js'],
 	};
 
     var swaggerSpec = swaggerJSDoc(options);

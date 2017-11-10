@@ -152,6 +152,27 @@ findAllMeetingMembers = (data)=>{
                             
 }
 
+findAllMeetingByStatus = (data)=>{
+    var query = {
+        limit: parseInt(data.limit),
+        offset: parseInt(data.offset),
+        order:[['memberJid', 'ASC']],
+        raw:true
+    }
+
+    if(typeof data.filter != 'undefined' && data.filter != null)
+        query.where = {$and: [
+                                { meetingStatus: parseInt(data.meetingStatus) },
+                                { coSpace: { $like: data.filter + '%' } },
+                                { uri: { $like: data.filter + '%' } }
+                        ]};
+    else
+        query.where = { meetingStatus: parseInt(data.meetingStatus) };
+    
+    return new Promise((resolve, reject) => resolve())
+    .then(()=>Meeting.findAndCount(query))  
+}
+
 /******---------------------------------------------- END OF ADAPTER METHODS ----------------------------------------------------------------------------------------***/
 /******---------------------------------------------- BEGIN OF INNER METHODS ----------------------------------------------------------------------------------------***/
 // BEGIN General Methods
@@ -169,3 +190,4 @@ module.exports.findOneMeeting = findOneMeeting;
 module.exports.findAllMeeting = findAllMeeting;
 module.exports.findMeetingMemberCount = findMeetingMemberCount;
 module.exports.findAllMeetingMembers = findAllMeetingMembers;
+module.exports.findAllMeetingByStatus = findAllMeetingByStatus;
