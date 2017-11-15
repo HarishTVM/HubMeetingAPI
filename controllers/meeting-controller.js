@@ -90,6 +90,12 @@ module.exports.updateMeeting = (req, res, next)=>{
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 }
 
+module.exports.getMeetingByMeetingId = (req, res, next)=>{
+	meetingAdapter.findOneMeeting(req.query)
+	.then((result)=>baseController.sendResponseData(cmsTypes.results.OK, result, res))
+    .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+}
+
 module.exports.findAllMeeting = (req, res, next)=>{
     var _result;
 

@@ -92,7 +92,7 @@ findOneMeeting = (data)=>{
     return new Promise((resolve, reject) => resolve())
     .then(()=>Meeting.findOne({
         where:{
-            meetingID: data.meetingID
+            meetingID: parseInt(data.meetingID)
         },
         raw: true
     }));
