@@ -120,10 +120,7 @@ findMeetingMemberCount = (data)=>{
         where:{
             meetingID:data.meetingID
         },
-        raw:true,    
-
-
-        
+        raw:true,   
         limit: 10,
         offset: 0
     })

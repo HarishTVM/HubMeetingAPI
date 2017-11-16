@@ -72,8 +72,8 @@ module.exports.deleteMeeting = (req, res, next)=>{
         return meetingAdapter.deleteAllMembersOfMeeting(data.meetingID);
     })
     .then(()=>meetingAdapter.deleteMeeting(data.meetingID))
-    .then(()=>{
-        if(_meetingObj.meetingType == cmsTypes.meetingType.ONE_TIME)
+        .then(() => {
+            if (_meetingObj.meetingType == cmsTypes.meetingType.ONE_TIME && _meetingObj.isInitiated == true)
             return httpHelper.deleteRequest(cmsTypes.CmsApis.COSPACES+'/'+_meetingObj.coSpaceId);
         else
             return ;
@@ -91,8 +91,16 @@ module.exports.updateMeeting = (req, res, next)=>{
 }
 
 module.exports.getMeetingByMeetingId = (req, res, next)=>{
+    var _result;
 	meetingAdapter.findOneMeeting(req.query)
-	.then((result)=>baseController.sendResponseData(cmsTypes.results.OK, result, res))
+	.then((result)=>{
+        _result = result;
+        return meetingAdapter.findMeetingMemberCount(result)
+    })
+    .then((count)=>{
+        _result.memberCount = count;
+        return baseController.sendResponseData(cmsTypes.results.OK, _result, res)
+    })
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 }
 
