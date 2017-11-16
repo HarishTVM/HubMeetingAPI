@@ -15,7 +15,7 @@ module.exports.createMeeting = (req, res, next) => {
 
     meetingAdapter.createMeeting(data)
     .then((meeting)=>{
-       // if(utility.isMeetingHasToScheduleNow(meeting.meetingStartDateTime)){
+       if(utility.isMeetingHasToScheduleNow(meeting.meetingStartDateTime)){
             meeting.meetingStatus = cmsTypes.meetingStatus.ON_GOING;
             meeting.isMeetingCreated = true;
 
@@ -51,9 +51,9 @@ module.exports.createMeeting = (req, res, next) => {
                 return jsonHelper.getcoSpaceObject(data)
                 .then((cospace)=>httpHelper.putRequest(cmsTypes.CmsApis.COSPACES+"/"+meeting.coSpaceId, cospace))
             }
-       // }
-        // else
-        //     return ;
+       }
+        else
+            return ;
     })
     .then((result)=>baseController.sendResponseData(cmsTypes.results.OK, '', res))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
@@ -87,6 +87,12 @@ module.exports.updateMeeting = (req, res, next)=>{
 
     meetingAdapter.updateMeeting(data)
     .then((result)=>baseController.sendResponseData(cmsTypes.results.OK, '', res))
+    .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+}
+
+module.exports.getMeetingByMeetingId = (req, res, next)=>{
+	meetingAdapter.findOneMeeting(req.query)
+	.then((result)=>baseController.sendResponseData(cmsTypes.results.OK, result, res))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 }
 

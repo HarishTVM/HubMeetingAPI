@@ -5,6 +5,12 @@
 const cmsTypes = require('../cms-types');
 const assert = require('assert');
 
+/**
+ * @swagger
+ * tags:
+ *    name: User
+ *    description:  User Realted API's like authentication, SMTP Configuration and API Configuration
+ */
 
 module.exports.sendResponseData = (result, data, res) => res.send(200, {"code":result, "data":data});
 
