@@ -20,6 +20,7 @@ server.post('/api/addUserInCospace', cmsApiController.addUserInCospace);
 server.get('/api/getUsers', cmsApiController.getUsers);
 server.get('/api/checkCoSpaceExistence', cmsApiController.checkCoSpaceExistence);
 server.post('/api/addCospaceMember', cmsApiController.addCospaceMember);
+server.get('/api/getCalls', cmsApiController.getCalls);
 server.get('/api/getActiveCall', cmsApiController.getActiveCall);
 server.del('/api/deleteActiveCall', cmsApiController.deleteActiveCall);
 

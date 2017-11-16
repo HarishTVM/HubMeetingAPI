@@ -174,7 +174,14 @@ module.exports.addCospaceMember = (req, res, next)=>{
     return res;
 };
 
-
+module.exports.getCalls = (req, res, next)=>{
+    var finalReq = cmsTypes.CmsApis.CALLS;
+    if(typeof req.query.callId != 'undefined' || req.query.callId != null)
+       finalReq = finalReq+"/"+req.query.callId;
+    httpHelper.getRequest(finalReq)
+    .then((response)=>baseController.sendResponseData(cmsTypes.results.OK,response, res))
+    .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+};
 
 module.exports.getActiveCall = (req, res, next)=>{
     var finalReq = cmsTypes.CmsApis.CALL_LEGS;
@@ -183,9 +190,6 @@ module.exports.getActiveCall = (req, res, next)=>{
     httpHelper.getRequest(finalReq)
     .then((response)=>baseController.sendResponseData(cmsTypes.results.OK,response, res))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
-<<<<<<< HEAD
-=======
-  
 };
 
 
@@ -197,5 +201,4 @@ module.exports.deleteActiveCall = (req, res, next)=>{
     .then((response)=>baseController.sendResponseData(cmsTypes.results.OK,response, res))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
   
->>>>>>> 8983292ba7128de5364b28165c7137e12d11ff23
 };
