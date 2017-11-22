@@ -84,3 +84,19 @@ module.exports.CmsApis = {
     CALLS:"calls",
     CALL_LEGS:"callLegs"
 }
+
+module.exports.logMessages= {
+    CREATED_MEETING :"new meeting has been created",
+    DELETED_MEETING :"deleted a meeting",
+    UPDATED_MEETING : "a meeting has been updated",
+    CREATED_COSPACE :"new cospace has been created",
+    UPDATED_COSPACE:"cospace has been updated",
+    ADD_USER_IN_COSPACE:"added user in cospace",
+    DELETED_USER :"user deleted in cospace",
+}
+
+module.exports.logType={
+    POST:0,
+    UPDATE:1,
+    DELETE:2
+}
