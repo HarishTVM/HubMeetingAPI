@@ -23,7 +23,7 @@ server.post('/api/addCospaceMember', cmsApiController.addCospaceMember);
 server.get('/api/getCalls', cmsApiController.getCalls);
 server.get('/api/getActiveCall', cmsApiController.getActiveCall);
 server.del('/api/deleteActiveCall', cmsApiController.deleteActiveCall);
-
+server.get('/api/authenticateCmsUser', cmsApiController.authenticateCmsUser);
 
 // LoginUser Related API
 server.post('/api/authenticateUser', userController.authenticateUser);

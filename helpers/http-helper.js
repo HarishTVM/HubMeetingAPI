@@ -89,6 +89,7 @@ module.exports.deleteRequest = (url, parameter)=>{
 var getResponse = (options)=>{
     return new Promise((resolve, reject)=>{
         request(options, (error, response, body) => {
+            console.log(error);
             if(error)reject(new Error(error));
             else{
                 if(response.statusCode >= 200 && response.statusCode < 400){

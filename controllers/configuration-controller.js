@@ -14,11 +14,8 @@ const config = require('../web-config');
 module.exports.checkCmsApiUrl = (req, res, next) =>{
     var data = req.body;
 
-    if(data.apiUrl.indexOf('api') < 0)
-        config.cmsAuth.apiUrl = data.apiUrl = data.apiUrl+"/api/v1/";
-    else
-        config.cmsAuth.apiUrl = data.apiUrl = data.apiUrl+"/";
-
+    config.cmsAuth.xmppUrl = data.apiUrl;
+    config.cmsAuth.apiUrl = data.apiUrl = "https://"+data.apiUrl+":445/api/v1/";
     config.cmsAuth.apiUser = data.apiUserName;
     config.cmsAuth.apiPassword = data.apiPassword;
 
@@ -27,6 +24,7 @@ module.exports.checkCmsApiUrl = (req, res, next) =>{
     .then((response)=>baseController.sendResponseData(cmsTypes.results.OK, "", res))
     .catch((err)=>{
         config.cmsAuth.apiUrl = null;
+        conf.cmsAuth.xmppUrl = null;
         config.cmsAuth.apiPassword = null;
         config.cmsAuth.apiUser = null;
         config.cmsAuth.base64Encode = null;

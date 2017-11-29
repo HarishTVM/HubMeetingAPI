@@ -8,7 +8,8 @@ var cmsAuth = {
 	apiUser : null,
 	apiPassword : null,
 	base64Encode : null,
-	apiUrl : null
+	apiUrl : null,
+	xmppUrl : null
 }
 
 module.exports.envType = env;

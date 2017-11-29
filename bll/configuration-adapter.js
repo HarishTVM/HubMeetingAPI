@@ -28,6 +28,7 @@ const SmtpConfiguration = model.smtpConfiguration;
             ApiConfiguration.insertOrUpdate({
                 ID:1,
                 apiUrl: data.apiUrl,
+                xmppUrl: config.cmsAuth.xmppUrl,
                 apiUserName: data.apiUserName,
                 apiPassword: data.apiPassword
             }))

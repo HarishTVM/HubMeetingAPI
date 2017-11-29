@@ -12,51 +12,56 @@ const jsonHelper = require('../helpers/json-helper');
 
 module.exports.createMeeting = (req, res, next) => {
     let data = req.body;
+    let _meeting;
 
     meetingAdapter.createMeeting(data)
-    .then((meeting)=>{
-       if(utility.isMeetingHasToScheduleNow(meeting.meetingStartDateTime)){
-            meeting.meetingStatus = cmsTypes.meetingStatus.ON_GOING;
-            meeting.isMeetingCreated = true;
+        .then((meeting) => {
+            _meeting = meeting;
+            return meetingAdapter.addMeetingMembers({ "members": data.members, "meetingObj": meeting });
+        })
+        .then(()=>{
+           if(utility.isMeetingHasToScheduleNow(_meeting.meetingStartDateTime)){
+                _meeting.meetingStatus = cmsTypes.meetingStatus.ON_GOING;
+                _meeting.isMeetingCreated = true;
+                _meeting.isInitiated = true;
 
-            if(meeting.meetingType == cmsTypes.meetingType.ONE_TIME){ // One time meeting
-                return jsonHelper.getcoSpaceObject(data)
-                .then((coSpace)=>httpHelper.postRequestWithHeaders(cmsTypes.CmsApis.COSPACES, coSpace))
-                .then((res)=>{
-                    meeting.coSpaceId = res.response.headers.location.substr(res.response.headers.location.lastIndexOf('/') + 1); 
-                    meetingAdapter.updateMeeting(meeting)
-                })
-                .then(()=>{
-                    let meetingMembers = [];
-                    data.members.forEach((member)=>{
-                        member.meetingID = meeting.meetingID;
-                        member.coSpaceId = meeting.coSpaceId;
-                        if(member.isOwner){
-                            member.canDestroy = true;
-                            member.canAddRemoveMember = true;
-                            member.canChangeName = true;
-                            member.canChangeUri = true;
-                            member.canChangeCallId = true;
-                            member.canChangePasscode = true;
-                            member.canPostMessage = true;
-                            member.canRemoveSelf = true;
-                        }
-                        meetingMembers.push(httpHelper.postRequest(cmsTypes.CmsApis.COSPACES+'/'+ meeting.coSpaceId+'/'+cmsTypes.CmsApis.COSPACEUSERS, jsonHelper.getMeetingMemberString(member)));
-                    });
-                    return Promise.all(meetingMembers);
-                })
-                .then(()=>meetingAdapter.addMeetingMembers({"members":data.members, "meetingObj":meeting}))
-            }
-            else{   // personal meeting
-                return jsonHelper.getcoSpaceObject(data)
-                .then((cospace)=>httpHelper.putRequest(cmsTypes.CmsApis.COSPACES+"/"+meeting.coSpaceId, cospace))
-            }
-       }
-        else
-            return ;
-    })
-    .then((result)=>baseController.sendResponseData(cmsTypes.results.OK, '', res))
-    .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+                if(_meeting.meetingType == cmsTypes.meetingType.ONE_TIME){ // One time meeting
+                    return jsonHelper.getcoSpaceObject(data)
+                    .then((coSpace)=>httpHelper.postRequestWithHeaders(cmsTypes.CmsApis.COSPACES, coSpace))
+                    .then((res)=>{
+                        _meeting.coSpaceId = res.response.headers.location.substr(res.response.headers.location.lastIndexOf('/') + 1); 
+                        meetingAdapter.updateMeeting(_meeting)
+                    })
+                    .then(()=>{
+                        let meetingMembers = [];
+                        data.members.forEach((member)=>{
+                            member.meetingID = _meeting.meetingID;
+                            member.coSpaceId = _meeting.coSpaceId;
+                            if(member.isOwner){
+                                member.canDestroy = true;
+                                member.canAddRemoveMember = true;
+                                member.canChangeName = true;
+                                member.canChangeUri = true;
+                                member.canChangeCallId = true;
+                                member.canChangePasscode = true;
+                                member.canPostMessage = true;
+                                member.canRemoveSelf = true;
+                            }
+                            meetingMembers.push(httpHelper.postRequest(cmsTypes.CmsApis.COSPACES+'/'+ _meeting.coSpaceId+'/'+cmsTypes.CmsApis.COSPACEUSERS, jsonHelper.getMeetingMemberString(member)));
+                        });
+                        return Promise.all(meetingMembers);
+                    })
+                }
+                else{   // personal meeting
+                    return jsonHelper.getcoSpaceObject(data)
+                    .then((cospace)=>httpHelper.putRequest(cmsTypes.CmsApis.COSPACES+"/"+_meeting.coSpaceId, cospace))
+                }
+           }
+            else
+                return ;
+        })
+        .then((result)=>baseController.sendResponseData(cmsTypes.results.OK, '', res))
+        .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 };
 
 module.exports.deleteMeeting = (req, res, next)=>{
