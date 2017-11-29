@@ -7,6 +7,7 @@ const cmsApiController = require('./controllers/cms-api-controller');
 const userController = require('./controllers/user-controller');
 const configurationController = require('./controllers/configuration-controller'); 
 const meetingController= require('./controllers/meeting-controller'); 
+const logsController= require('./controllers/logs-controller'); 
 const server = require('./main').server;
 
 server.get('/api/getCospaces', cmsApiController.getCospaces);
@@ -37,3 +38,6 @@ server.del('/api/deleteMeeting', meetingController.deleteMeeting);
 server.get('/api/findAllMeeting', meetingController.findAllMeeting);
 server.get('/api/getMeetingByMeetingId', meetingController.getMeetingByMeetingId);
 server.get('/api/findAllMeetingMembers', meetingController.findAllMeetingMembers);
+
+//Logs Related API
+server.get('/api/findAllLogs', logsController.findAllLogs);

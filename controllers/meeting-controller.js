@@ -9,6 +9,7 @@ const meetingAdapter = require('../bll/meeting-adapter');
 const utility = require('../helpers/utility');
 const httpHelper = require('../helpers/http-helper');
 const jsonHelper = require('../helpers/json-helper');
+const logsController = require('./logs-controller');
 
 module.exports.createMeeting = (req, res, next) => {
     let data = req.body;
@@ -61,6 +62,7 @@ module.exports.createMeeting = (req, res, next) => {
                 return ;
         })
         .then((result)=>baseController.sendResponseData(cmsTypes.results.OK, '', res))
+        .then((result,type)=>logsController.sendLogData(cmsTypes.logMessages.CREATED_MEETING,cmsTypes.logType.POST))
         .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 };
 
@@ -84,14 +86,16 @@ module.exports.deleteMeeting = (req, res, next)=>{
             return ;
     })
     .then((result)=>baseController.sendResponseData(cmsTypes.results.OK, '', res))
+    .then((result,type)=>logsController.sendLogData(cmsTypes.logMessages.DELETED_MEETING,cmsTypes.logType.DELETE))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 }
 
 module.exports.updateMeeting = (req, res, next)=>{
-    let data = req.query;
+    let data = req.body;
 
     meetingAdapter.updateMeeting(data)
     .then((result)=>baseController.sendResponseData(cmsTypes.results.OK, '', res))
+    .then((result,type)=>logsController.sendLogData(cmsTypes.logMessages.UPDATED_MEETING,cmsTypes.logType.UPDATE))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 }
 
