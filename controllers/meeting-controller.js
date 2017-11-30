@@ -13,9 +13,11 @@ const logsController = require('./logs-controller');
 
 module.exports.createMeeting = (req, res, next) => {
     let data = req.body;
+    let meetingId;
 
     meetingAdapter.createMeeting(data)
     .then((meeting)=>{
+       meetingId = meeting.meetingID;
        if(utility.isMeetingHasToScheduleNow(meeting.meetingStartDateTime)){
             meeting.meetingStatus = cmsTypes.meetingStatus.ON_GOING;
             meeting.isMeetingCreated = true;
@@ -24,7 +26,7 @@ module.exports.createMeeting = (req, res, next) => {
                 return jsonHelper.getcoSpaceObject(data)
                 .then((coSpace)=>httpHelper.postRequestWithHeaders(cmsTypes.CmsApis.COSPACES, coSpace))
                 .then((res)=>{
-                    meeting.coSpaceId = res.response.headers.location.substr(res.response.headers.location.lastIndexOf('/') + 1); 
+                    meeting.coSpaceId = res.response.headers.location.substr(res.response.headers.location.lastIndexOf('/') + 1);
                     meetingAdapter.updateMeeting(meeting)
                 })
                 .then(()=>{
@@ -50,18 +52,20 @@ module.exports.createMeeting = (req, res, next) => {
             }
             else{   // personal meeting
                 return jsonHelper.getcoSpaceObject(data)
-                console.log('data'+data)
                 .then((cospace)=>httpHelper.putRequest(cmsTypes.CmsApis.COSPACES+"/"+meeting.coSpaceId, cospace))
-            }
-            console.log('data'+data)
+            }      
        }
         else
             return ;
     })
     .then((result)=>baseController.sendResponseData(cmsTypes.results.OK, '', res))
-    .then((result,type)=>logsController.sendLogData(cmsTypes.logMessages.CREATED_MEETING,cmsTypes.logType.POST))
+    .then((desc,type,id)=>logsController.sendLogData(cmsTypes.logMessages['0'],cmsTypes.logType.CREATE_MEETING,meetingId))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 };
+
+module.exports.getmeetingId=(data)=>{
+    console.log(data)
+}
 
 module.exports.deleteMeeting = (req, res, next)=>{
     let data = req.query;
@@ -83,16 +87,17 @@ module.exports.deleteMeeting = (req, res, next)=>{
             return ;
     })
     .then((result)=>baseController.sendResponseData(cmsTypes.results.OK, '', res))
-    .then((result,type)=>logsController.sendLogData(cmsTypes.logMessages.DELETED_MEETING,cmsTypes.logType.DELETE))
+    .then((desc,type,id)=>logsController.sendLogData(cmsTypes.logMessages['1'],cmsTypes.logType.DELETE_MEETING))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 }
 
 module.exports.updateMeeting = (req, res, next)=>{
     let data = req.body;
-
+    let meetingId = req.body.meetingID;
+    
     meetingAdapter.updateMeeting(data)
     .then((result)=>baseController.sendResponseData(cmsTypes.results.OK, '', res))
-    .then((result,type)=>logsController.sendLogData(cmsTypes.logMessages.UPDATED_MEETING,cmsTypes.logType.UPDATE))
+    .then((desc,type,id)=>logsController.sendLogData(cmsTypes.logMessages['2'],cmsTypes.logType.UPDATE_MEETING,meetingId))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 }
 

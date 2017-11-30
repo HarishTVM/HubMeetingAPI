@@ -85,18 +85,25 @@ module.exports.CmsApis = {
     CALL_LEGS:"callLegs"
 }
 
-module.exports.logMessages= {
-    CREATED_MEETING :"new meeting has been created",
-    DELETED_MEETING :"deleted a meeting",
-    UPDATED_MEETING : "a meeting has been updated",
-    CREATED_COSPACE :"new cospace has been created",
-    UPDATED_COSPACE:"cospace has been updated",
-    ADD_USER_IN_COSPACE:"added user in cospace",
-    DELETED_USER :"user deleted in cospace",
-}
 
+ /** Logs Related Messages **/
+module.exports.logMessages= {
+        0 :"new meeting has been created",
+        1 :"deleted a meeting",
+        2 :"a meeting has been updated",
+        3 :"new cospace has been created",
+        4 :"cospace has been updated",
+        5 :"added user in cospace",
+        6 :"user deleted in cospace"
+    }
+
+ /** Logs Related Status **/
 module.exports.logType={
-    POST:0,
-    UPDATE:1,
-    DELETE:2
+    CREATE_MEETING:0,
+    DELETE_MEETING:1,
+    UPDATE_MEETING:2,
+    CREATE_COSPACE:3,
+    UPDATE_COSPACE:4,
+    ADD_USER_IN_COSPACE:5,
+    DELETE_USER:6
 }
