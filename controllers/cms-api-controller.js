@@ -7,6 +7,10 @@ const baseController = require('./base-controller');
 const httpHelper = require('../helpers/http-helper');
 const cmsTypes = require('../cms-types');
 const jsonHelper = require('../helpers/json-helper');
+const config = require('../web-config');
+const utility = require('../helpers/utility');
+
+let samp = "fg";
 const logsController = require('./logs-controller');
 
 module.exports.getCospaces = (req, res, next)=>{
@@ -211,4 +215,13 @@ module.exports.deleteActiveCall = (req, res, next)=>{
     .then((response)=>baseController.sendResponseData(cmsTypes.results.OK,response, res))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
   
+};
+
+module.exports.authenticateCmsUser = (req, res, next) =>{
+    utility.authCmsUser(req.query, (err, result)=>{
+        if(err)
+            (err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res));
+        else
+            baseController.sendResponseData(cmsTypes.results.OK, result, res)
+    });
 };

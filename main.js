@@ -100,6 +100,7 @@ const cors = corsMiddleware({
                 if(result!=null)
                 {
                     config.cmsAuth.apiUrl = result.apiUrl;
+                    config.cmsAuth.xmppUrl = result.xmppUrl;
                     config.cmsAuth.apiPassword = result.apiPassword;
                     config.cmsAuth.apiUser = result.apiUserName;
                 }

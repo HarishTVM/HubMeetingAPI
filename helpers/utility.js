@@ -6,6 +6,8 @@ const crypto = require('crypto');
 const hashString = require('../web-config').app.hashString;
 const cmsTypes = require('../cms-types');
 const moment = require('moment-timezone');
+const config = require('../web-config');
+const xmpp = require('simple-xmpp');
 
 // Encrypt the password
 exports.hashString = function(password){
@@ -26,3 +28,30 @@ exports.isMeetingHasToScheduleNow = function (meetingStartDate) {
     else
         return false;
 };
+
+exports.authCmsUser = (data, callback)=>{
+    xmpp.connect({
+        jid		: data.id,
+        password: data.password,
+        host	: config.cmsAuth.xmppUrl,
+        port	: 5222,
+        timeout : 1000
+    });
+
+    successHandler = (data)=>{
+        xmpp.removeListener('online', successHandler);
+        xmpp.removeListener('error', errorHandler);
+        xmpp.disconnect();
+        callback(null, data);
+    }
+
+    errorHandler = (err)=>{
+        xmpp.removeListener('error', errorHandler);
+        xmpp.removeListener('online', successHandler);
+        xmpp.disconnect();
+        callback(err, null);
+    }
+
+    xmpp.on('online', successHandler);
+    xmpp.on('error', errorHandler);
+}
