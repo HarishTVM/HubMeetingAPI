@@ -22,7 +22,6 @@ createMeeting = (data) =>{
          Meeting
          .build(meetingObj)
         .save({raw: true}))
-    .then((result)=>result.get({plain: true}))
 };
 
 updateMeeting = (data)=>{

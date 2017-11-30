@@ -62,9 +62,13 @@ module.exports.createMeeting = (req, res, next) => {
                 return ;
         })
         .then((result)=>baseController.sendResponseData(cmsTypes.results.OK, '', res))
-        .then((result,type)=>logsController.sendLogData(cmsTypes.logMessages.CREATED_MEETING,cmsTypes.logType.POST))
+        .then((desc,type,id)=>logsController.sendLogData(cmsTypes.logMessages['0'],cmsTypes.logType.CREATE_MEETING,meetingId))
         .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 };
+
+module.exports.getmeetingId=(data)=>{
+    console.log(data)
+}
 
 module.exports.deleteMeeting = (req, res, next)=>{
     let data = req.query;
@@ -86,16 +90,17 @@ module.exports.deleteMeeting = (req, res, next)=>{
             return ;
     })
     .then((result)=>baseController.sendResponseData(cmsTypes.results.OK, '', res))
-    .then((result,type)=>logsController.sendLogData(cmsTypes.logMessages.DELETED_MEETING,cmsTypes.logType.DELETE))
+    .then((desc,type,id)=>logsController.sendLogData(cmsTypes.logMessages['1'],cmsTypes.logType.DELETE_MEETING))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 }
 
 module.exports.updateMeeting = (req, res, next)=>{
     let data = req.body;
-
+    let meetingId = req.body.meetingID;
+    
     meetingAdapter.updateMeeting(data)
     .then((result)=>baseController.sendResponseData(cmsTypes.results.OK, '', res))
-    .then((result,type)=>logsController.sendLogData(cmsTypes.logMessages.UPDATED_MEETING,cmsTypes.logType.UPDATE))
+    .then((desc,type,id)=>logsController.sendLogData(cmsTypes.logMessages['2'],cmsTypes.logType.UPDATE_MEETING,meetingId))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 }
 

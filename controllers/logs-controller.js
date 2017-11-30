@@ -11,12 +11,13 @@ const cmsController = require('./cms-api-controller');
 const logAdapter = require('../bll/logs-adapter');
 const meetingController = require('./meeting-controller');
 
-module.exports.sendLogData = (results,type) =>{ console.log("in logs controller "+results + type)
-    var type = type;
-    var description = results;
-    console.log(type)
-    console.log(description)
-    logAdapter.creatLog(type,description)
+module.exports.sendLogData = (desc,type,id) =>{ console.log("in logs controller "+desc + type + id)
+    var meetingid,cospaceid;
+    if(type == 0 || type == 2 )
+        meetingid = id;
+    else if(type == 3 || type == 4 || type == 5 )
+        cospaceid = id;
+    logAdapter.creatLog(type,desc,meetingid,cospaceid)
 }
 
 module.exports.findAllLogs = (req, res, next)=>{

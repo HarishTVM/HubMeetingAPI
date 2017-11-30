@@ -14,14 +14,16 @@ const Log = model.log;
 
 /******---------------------------------------------- BEGIN OF ADAPTER METHODS --------------------------------------------------------------------------------------***/
 
-creatLog = (logtype,desc) =>{
+creatLog = (logtype,desc,meetingid,cospaceid) =>{
+
     return new Promise((resolve, reject) => resolve())
     .then(()=>
         Log.build({
             logType:logtype,
             logTitle: desc,
-            logDescription: desc
-            
+            logDescription: desc,
+            meetingId:meetingid,
+            coSpaceId:cospaceid 
         })
         .save({raw: true}))
 };
@@ -37,7 +39,8 @@ findAllLogs = (data)=>{
     if(typeof data.filter != 'undefined' && data.filter != null){
         query.where = {$or: [
                                 { logTitle: { $like: data.filter + '%' } }
-                        ]};
+                        ],
+                    };
     }
   
 
