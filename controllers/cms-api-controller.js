@@ -59,6 +59,24 @@ module.exports.getCospacesbyId = (req, res, next)=>{
     return res;
 };
 
+module.exports.getCospacesUserByIdAndDetails = (req, res, next)=>{
+    var finalReq = cmsTypes.CmsApis.COSPACES+"/"+req.query.cospaceid+"/"+cmsTypes.CmsApis.COSPACEUSERS + "?limit="+req.query.limit+"&offset="+req.query.offset;
+    finalReq = getRequestQuery(req, finalReq);
+    httpHelper.getRequest(finalReq)
+    .then((response)=>{
+        if(response.userCoSpaces.attrkey.total == 1)
+            response.userCoSpaces.userCoSpace = [userCoSpaces.userCoSpace];
+
+        let promiseRef = [];
+        response.coSpaceUsers.coSpaceUsers.forEach((coSpace)=>promiseRef.push(httpHelper.getRequest(cmsTypes.CmsApis.COSPACES + "/" + coSpace.attrkey.id)));
+        Promise.all(promiseRef)
+        .then((coSpaces)=>{
+            console.log(coSpaces);
+        })
+    })
+    .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+};
+
 module.exports.createCospace = (req, res, next)=>{
     let cospace = req.body;
     let cospaceId;

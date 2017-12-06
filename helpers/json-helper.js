@@ -33,6 +33,8 @@ module.exports.getcoSpaceObject = (data)=>{
             coSpaceObj += "&regenerateSecret="+data.regenerateSecret;
         if(typeof data.nonMemberAccess != 'undefined' && data.nonMemberAccess != null)
             coSpaceObj += "&nonMemberAccess="+data.nonMemberAccess;
+        if(typeof data.ownerId != 'undefined' && data.ownerId != null)
+            coSpaceObj += "&ownerId="+data.ownerId;
         if(typeof data.ownerJid != 'undefined' && data.ownerJid != null)
             coSpaceObj += "&ownerJid="+data.ownerJid;
         if(typeof data.streamUrl != 'undefined' && data.streamUrl != null)
