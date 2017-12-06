@@ -37,13 +37,17 @@ findAllLogs = (data)=>{
     }
 
     if(typeof data.filter != 'undefined' && data.filter != null){
-        query.where = {$or: [
-                                { logTitle: { $like: data.filter + '%' } }
+        query.where = {$and: [
+            query.where = { logId: parseInt(data.filter) },
+                        //   { logTitle: { $like: data.filter + '%' } }
                         ],
                     };
     }
-  
+    // else
+    // query.where =  { logTitle: { $like: data.filter + '%' } };
+ 
 
+ 
     return new Promise((resolve, reject) => resolve())
     .then(()=>Log.findAndCount(query))
                             

@@ -38,6 +38,7 @@ server.del('/api/deleteMeeting', meetingController.deleteMeeting);
 server.get('/api/findAllMeeting', meetingController.findAllMeeting);
 server.get('/api/getMeetingByMeetingId', meetingController.getMeetingByMeetingId);
 server.get('/api/findAllMeetingMembers', meetingController.findAllMeetingMembers);
+server.get('/api/findMeetingByStatus', meetingController.findMeetingByStatus);
 
 //Logs Related API
 server.get('/api/findAllLogs', logsController.findAllLogs);
