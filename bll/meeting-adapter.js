@@ -106,10 +106,10 @@ findAllMeeting = (data)=>{
     }
 
     if(typeof data.filter != 'undefined' && data.filter != null)
-        query.where = {$or: [
+        {query.where = {$or: [
                                 { coSpace: { $like: data.filter + '%' } },
                                 { uri: { $like: data.filter + '%' } }
-                            ]};
+                            ]};}
     return new Promise((resolve, reject) => resolve())
     .then(()=>Meeting.findAndCount(query))
 };
@@ -152,12 +152,12 @@ findAllMeetingByStatus = (data)=>{
     var query = {
         limit: parseInt(data.limit),
         offset: parseInt(data.offset),
-        order:[['memberJid', 'ASC']],
+        order:[['meetingID', 'ASC']],
         raw:true
     }
 
     if(typeof data.filter != 'undefined' && data.filter != null)
-        query.where = {$and: [
+        query.where = {$or: [
                                 { meetingStatus: parseInt(data.meetingStatus) },
                                 { coSpace: { $like: data.filter + '%' } },
                                 { uri: { $like: data.filter + '%' } }

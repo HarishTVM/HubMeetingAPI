@@ -68,7 +68,7 @@ module.exports.createMeeting = (req, res, next) => {
 };
 
 module.exports.getmeetingId=(data)=>{
-    console.log(data)
+    // console.log(data)
 }
 
 module.exports.deleteMeeting = (req, res, next)=>{
@@ -141,6 +141,12 @@ module.exports.findAllMeeting = (req, res, next)=>{
 
 module.exports.findAllMeetingMembers = (req, res, next)=>{
     meetingAdapter.findAllMeetingMembers(req.query)
+    .then((result)=>baseController.sendResponseData(cmsTypes.results.OK, result, res))
+    .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
+}
+
+module.exports.findMeetingByStatus = (req, res, next)=>{
+    meetingAdapter.findAllMeetingByStatus(req.query)
     .then((result)=>baseController.sendResponseData(cmsTypes.results.OK, result, res))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 }
