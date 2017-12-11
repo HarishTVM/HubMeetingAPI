@@ -71,7 +71,7 @@ module.exports.getCospacesUserByIdAndDetails = (req, res, next)=>{
         response.coSpaceUsers.coSpaceUsers.forEach((coSpace)=>promiseRef.push(httpHelper.getRequest(cmsTypes.CmsApis.COSPACES + "/" + coSpace.attrkey.id)));
         Promise.all(promiseRef)
         .then((coSpaces)=>{
-            console.log(coSpaces);
+            // console.log(coSpaces);
         })
     })
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
@@ -112,8 +112,6 @@ module.exports.updateCospace = (req, res, next)=>{
     let cospace = req.body;
     jsonHelper.getcoSpaceObject(cospace)
     .then((data)=>httpHelper.putRequest(cmsTypes.CmsApis.COSPACES+"/"+cospace.coSpaceId , data))
-    // httpHelper.putRequest(cmsTypes.CmsApis.COSPACES+"/"+cospace.coSpaceId , "name="+cospace.name+"&uri="+cospace.uri+"&passcode="+cospace.passcode+"&defaultLayout="+cospace.defaultLayout+"&cdrTag="+cospace.cdrTag)
-    .then((response)=>baseController.sendResponseData(cmsTypes.results.OK, response, res))
     .then((desc,type,id)=>logsController.sendLogData(cmsTypes.logMessages['4'],cmsTypes.logType.UPDATE_COSPACE,cospace.coSpaceId))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 };
@@ -230,7 +228,6 @@ module.exports.getActiveCall = (req, res, next)=>{
 module.exports.deleteActiveCall = (req, res, next)=>{
     var callId =  req.body.callId;
     var finalReq = cmsTypes.CmsApis.CALL_LEGS + '/' + callId;
-    console.log(finalReq);
     httpHelper.deleteRequest(finalReq)
     .then((response)=>baseController.sendResponseData(cmsTypes.results.OK,response, res))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));

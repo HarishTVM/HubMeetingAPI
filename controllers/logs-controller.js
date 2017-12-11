@@ -11,7 +11,7 @@ const cmsController = require('./cms-api-controller');
 const logAdapter = require('../bll/logs-adapter');
 const meetingController = require('./meeting-controller');
 
-module.exports.sendLogData = (desc,type,id) =>{ console.log("in logs controller "+desc + type + id)
+module.exports.sendLogData = (desc,type,id) =>{
     var meetingid,cospaceid;
     if(type == 0 || type == 2 )
         meetingid = id;
