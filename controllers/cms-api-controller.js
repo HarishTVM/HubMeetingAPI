@@ -112,6 +112,7 @@ module.exports.updateCospace = (req, res, next)=>{
     let cospace = req.body;
     jsonHelper.getcoSpaceObject(cospace)
     .then((data)=>httpHelper.putRequest(cmsTypes.CmsApis.COSPACES+"/"+cospace.coSpaceId , data))
+    .then((response)=>baseController.sendResponseData(cmsTypes.results.OK, response, res))
     .then((desc,type,id)=>logsController.sendLogData(cmsTypes.logMessages['4'],cmsTypes.logType.UPDATE_COSPACE,cospace.coSpaceId))
     .catch((err)=>(err.context != null && err.context.errorType == cmsTypes.results.CUSTOM_ERROR)?(baseController.sendCustomError(err, res)):(baseController.sendUnhandledError(err, res)));
 };
